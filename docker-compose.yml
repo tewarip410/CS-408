@@ -1,0 +1,10 @@
+version: '3'
+services:
+  webapp:
+    build: .
+    image: travelers
+    command: nodemon app.js
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - "8081:8081"
