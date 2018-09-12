@@ -1,10 +1,11 @@
-version: '3'
+version: "3"
+
 services:
-  webapp:
+  web:
     build: .
-    image: travelers
-    command: nodemon app.js
+    command: nodemon --inspect=5858 app.js
     volumes:
-      - ./app:/usr/src/app
+      - .:/code
     ports:
-      - "8081:8081"
+      - "8000:8000"
+      - "5858:5858"
