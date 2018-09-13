@@ -8,7 +8,17 @@ const passport = require('passport');
 // const flash = require('express-flash');
 // const reqFlash = require('req-flash');
 // const methodOverride = require('method-override');
+const mongoose = require('mongoose');
+
 const app = express();
+
+// connect to database
+const connection = 'mongodb://mongo:27017';
+mongoose.connect(connection);
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+// bind mongo error
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +34,7 @@ app.use(passport.session());
 require('./app/server/config/passport.js')(passport);
 
 app.get('/', (req, res) => {
-  res.render('login');
+  res.render('map');
 });
 const authRouter = require('./app/server/routes/auth.js');
 const indexRouter = require('./app/server/routes/index.js');

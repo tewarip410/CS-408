@@ -6,9 +6,12 @@ router.get('/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 
 router.get('/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+  passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }));
 
+router.get('/logout', (req, res) => {
+  if (req.isAuthenticated()) {
+    req.logout();
+  }
+  return res.redirect('/');
+})
 module.exports = router;
