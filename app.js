@@ -14,6 +14,10 @@ app.get('/test', function(req, res) {
   res.render('test');
 })
 
+app.get('/form', function(req, res) {
+  res.render('form');
+})
+
 app.listen(8081, function() {
   console.log('app started on port 8081');
 });
