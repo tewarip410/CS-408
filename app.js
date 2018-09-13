@@ -1,10 +1,34 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+// const logger = require('morgan');
+const bodyParser = require('body-parser');
+const path = require('path');
+const passport = require('passport');
+// const session = require('express-session');
+// const RedisStore = require('connect-redis')(session);
+// const flash = require('express-flash');
+// const reqFlash = require('req-flash');
+// const methodOverride = require('method-override');
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, './app/views'));
+
+require('dotenv').config();
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./app/server/config/passport.js')(passport);
 
 app.get('/', (req, res) => {
-  res.send('docker');
+  res.render('login');
 });
+const authRouter = require('./app/server/routes/auth.js');
+
+app.use('/auth', authRouter);
 
 app.get('/map', function(req, res) {
   res.render('map');
