@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('passport');
-// const session = require('express-session');
+const session = require('express-session');
 // const RedisStore = require('connect-redis')(session);
 // const flash = require('express-flash');
 // const reqFlash = require('req-flash');
@@ -22,25 +22,34 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './app/views'));
 
 require('dotenv').config();
-
+app.use(require('express-session')({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) }, // 4 hours
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use('/public', express.static(path.join(__dirname, '/app/public')));
+app.use('/views/includes', express.static(path.join(__dirname, 'includes')));
 require('./app/server/config/passport.js')(passport);
 
-app.get('/', (req, res) => {
-  res.render('map');
-});
 const authRouter = require('./app/server/routes/auth.js');
 const indexRouter = require('./app/server/routes/index.js');
 
+const authController = require('./app/server/controllers/auth');
+
 app.use('/auth', authRouter);
 app.use('/index', indexRouter);
+
+
+app.get('/', authController.ensureAuthenticated, (req, res) => {
+  res.render('home');
+});
 
 app.get('/map', function(req, res) {
   res.render('map');

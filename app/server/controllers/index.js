@@ -1,9 +1,6 @@
 module.exports = {
   indexGet: async (req, res) => {
-    const user = {
-      name: 'Sean Becker',
-      age: 'Twenty-fun'
-    }
-    return res.render('index.ejs', { user });
+    console.log(req.user);
+    return res.render('index.ejs', { user: req.user });
   }
 };

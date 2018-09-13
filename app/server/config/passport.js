@@ -11,16 +11,18 @@ module.exports = (passport) => {
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: GOOGLE_CALLBACK_URL
   }, (accessToken, refreshToken, profile, done) => {
-    User.findOrCreate({ profile }, (err, user) => {
+    User.findOrCreate(profile, (err, user) => {
       return done(err, user);
     });
   }));
 
   passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    console.log('user:' + user);
+    done(null, user._id);
   });
 
   passport.deserializeUser(function(id, done) {
+    console.log('deserializing ' + id);
     User.findById(id, function(err, user) {
       done(err, user);
     });
