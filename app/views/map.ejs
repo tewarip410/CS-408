@@ -95,7 +95,8 @@
       function submitMarkers() {
         // For now log all marker info (lat, lng) to console
         for (var i = 0; i < markers.length; i++) {
-          console.log(markers[i]);
+          console.log(markers[i].position.lat());
+          console.log(markers[i].position.lng());
         }
       }
     </script>
