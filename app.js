@@ -27,8 +27,10 @@ app.get('/', (req, res) => {
   res.render('login');
 });
 const authRouter = require('./app/server/routes/auth.js');
+const indexRouter = require('./app/server/routes/index.js');
 
 app.use('/auth', authRouter);
+app.use('/index', indexRouter);
 
 app.get('/map', function(req, res) {
   res.render('map');
