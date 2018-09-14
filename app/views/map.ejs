@@ -118,9 +118,12 @@
       var markers = [];
 
       function initAutocomplete() {
+        var geocoder = new google.maps.Geocoder;
+        var infowindow = new google.maps.InfoWindow;
+
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13,
+          center: {lat: 39.768403, lng: -86.15806800000001},
+          zoom: 5,
           mapTypeId: 'roadmap'
         });
 
@@ -131,7 +134,7 @@
 
         // This event listener will call addMarker() when the map is clicked.
         map.addListener('click', function(event) {
-          addMarker(event.latLng);
+          addMarker(event.latLng, geocoder, map);
         });
 
         // Bias the SearchBox results towards current map's viewport.
@@ -163,13 +166,19 @@
               scaledSize: new google.maps.Size(25, 25)
             };
 
-            // Create a marker for each place.
-            markers.push(new google.maps.Marker({
-              map: map,
-              icon: icon,
-              title: place.name,
-              position: place.geometry.location
-            }));
+            var latlng = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()};
+            geocoder.geocode({'location': latlng}, function(results, status) {
+              if (status === 'OK') {
+                if (results[0]) {
+                  var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    title: results[0].formatted_address
+                  });
+                  markers.push(marker);
+                }
+              }
+            });
 
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
@@ -180,9 +189,6 @@
           });
           map.fitBounds(bounds);
         });
-
-        var geocoder = new google.maps.Geocoder;
-        var infowindow = new google.maps.InfoWindow;
 
         document.getElementById('submit').addEventListener('click', function() {
           geocodeLatLng(geocoder, map, infowindow);
@@ -200,7 +206,8 @@
                 map.setZoom(11);
                 var marker = new google.maps.Marker({
                   position: latlng,
-                  map: map
+                  map: map,
+                  title: results[0].formatted_address
                 });
                 markers.push(marker);
                 infowindow.setContent(results[0].formatted_address);
@@ -216,12 +223,20 @@
       }
 
       // Adds a marker to the map and push to the array.
-      function addMarker(location) {
-        var marker = new google.maps.Marker({
-          position: location,
-          map: map
+      function addMarker(location, geocoder, map) {
+        var latlng = {lat: location.lat(), lng: location.lng()};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                title: results[0].formatted_address
+              });
+              markers.push(marker);
+            }
+          }
         });
-        markers.push(marker);
       }
 
       // Sets the map on all markers in the array.
