@@ -69,11 +69,16 @@ app.get('/test', function(req, res) {
 })
 
 app.get('/form', function(req, res) {
-  res.render('form', {data: req.session.data});
+  if (!req.session.data) {
+		res.redirect('/map');
+  }
+  else {
+    res.render('form', {data: req.session.data});
+  }
 })
 
 app.post('/uploadLocations', function(req, res, next) {
-  console.log(req.body.location_data[0][0]);
+  //console.log(req.body.location_data[0][0]); - for reference
   req.session.data = req.body;
   res.render('map');
 })
