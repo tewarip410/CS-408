@@ -59,6 +59,15 @@ app.get('/test', function(req, res) {
   res.render('test');
 })
 
+app.get('/form', function(req, res) {
+  res.render('form');
+})
+
+app.post('/uploadLocations', function(req, res, next) {
+  //save location data as var and render to home.ejs
+  res.render('map');
+})
+
 app.listen(8081, function() {
   console.log('app started on port 8081');
 });

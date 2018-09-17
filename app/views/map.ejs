@@ -277,10 +277,14 @@
       }
 
       function submitMarkers() {
-        var html = "<form>";
+        var location_data = [];
+        
+        //var html = "<form>";
         for (var i = 0; i < markers.length; i++) {
           var location = [markers[i].position.lat(), markers[i].position.lng(), markers[i].title];
-          if (i === 0) {
+          location_data.push(location);
+        }
+          /**if (i === 0) {
             html += "<p>" + markers[i].title + " - Start Location" + "</p>";
           }
           else if (i === markers.length - 1) {
@@ -298,7 +302,15 @@
           }
         }
         html += "<button type=\"button\" class=\"btn btn-primary\">Plan my vacation!</button></form>";
-        $('#form-container').html(html);
+        $('#form-container').html(html); **/
+        $.ajax({
+          url: '/uploadLocations',
+          type: 'POST',
+          data: JSON.stringify(location_data),
+          success: function(data) {
+            window.location.pathname = "form";
+          }
+        });
       }
 
       $('#datepicker').datepicker({
