@@ -46,6 +46,15 @@ const authController = require('./app/server/controllers/auth');
 app.use('/auth', authRouter);
 app.use('/index', indexRouter);
 
+var sessions = require('client-sessions');
+app.use(sessions({
+	cookieName: 'session',
+	secret: 'b0ilermaker',
+	duration: 30 * 60 * 1000,
+	cookie: {
+        ephemeral: true //ends the cookie when the browser closes (not the window/tab but the browser itself)
+    }
+}));
 
 app.get('/', authController.ensureAuthenticated, (req, res) => {
   res.render('home');
@@ -60,11 +69,12 @@ app.get('/test', function(req, res) {
 })
 
 app.get('/form', function(req, res) {
-  res.render('form');
+  res.render('form', {data: req.session.data});
 })
 
 app.post('/uploadLocations', function(req, res, next) {
-  //save location data as var and render to home.ejs
+  console.log(req.body.location_data[0][0]);
+  req.session.data = req.body;
   res.render('map');
 })
 

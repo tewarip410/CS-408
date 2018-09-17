@@ -279,34 +279,15 @@
       function submitMarkers() {
         var location_data = [];
         
-        //var html = "<form>";
         for (var i = 0; i < markers.length; i++) {
-          var location = [markers[i].position.lat(), markers[i].position.lng(), markers[i].title];
-          location_data.push(location);
+          var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng()];
+          location_data.push(data);
         }
-          /**if (i === 0) {
-            html += "<p>" + markers[i].title + " - Start Location" + "</p>";
-          }
-          else if (i === markers.length - 1) {
-            html += "<p>" + markers[i].title + " - End Location" + "</p>";
-          }
-          else {
-            html += "<p>" + markers[i].title + "</p>";
-            html += "<div class=\"row\"><div class=\"col\"><input type=\"text\" class=\"form-control\" placeholder=\"Duration of Stay\"></div>";
-            html += "<div class=\"form-check form-check-inline\"><input class=\"form-check-input\" type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio1\" value=\"option1\">";
-            html += "<label class=\"form-check-label\" for=\"inlineRadio1\">Plane</label></div>";
-            html += "<div class=\"form-check form-check-inline\"><input class=\"form-check-input\" type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio2\" value=\"option2\">";
-            html += "<label class=\"form-check-label\" for=\"inlineRadio2\">Car</label></div>";
-            html += "<div class=\"form-check form-check-inline\"><input class=\"form-check-input\" type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio3\" value=\"option3\">";
-            html += "<label class=\"form-check-label\" for=\"inlineRadio3\">Train</label></div></div>";
-          }
-        }
-        html += "<button type=\"button\" class=\"btn btn-primary\">Plan my vacation!</button></form>";
-        $('#form-container').html(html); **/
+
         $.ajax({
           url: '/uploadLocations',
           type: 'POST',
-          data: JSON.stringify(location_data),
+          data: {location_data},
           success: function(data) {
             window.location.pathname = "form";
           }
