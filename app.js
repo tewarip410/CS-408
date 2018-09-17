@@ -85,8 +85,17 @@ app.post('/uploadLocations', function(req, res, next) {
 
 app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
   //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
-  console.log(req.body)
-  console.log(req.body.duration);
+  var date = req.body.date;
+  var round_trip = req.body.rt;
+  var trip_data = [];
+  for (var i = 0; i < req.body.duration.length; i++) {
+    var radio = "exampleRadios " + i;
+
+    data = [req.body.duration[i], req.body.order[i], req.body[radio]];
+    trip_data.push(data);
+  }
+
+  console.log(trip_data);
 })
 
 app.listen(8081, function() {

@@ -22,7 +22,6 @@
             <input name="date" id="datepicker" width="276" />
             <% var i = 0; %>
             <% data.location_data.forEach(function(obj) { %>
-                <% i++; %>
                 <div class="form-group">
                     <label><%- obj[0] %></label>
                     <input type="text" placeholder="Duration of stay" class="form-control" name="duration" id="<%- obj[0] %>-stay">
@@ -31,29 +30,30 @@
                     <input type="text" placeholder="Order" class="form-control" name="order" id="<%- obj[0] %>-order">
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="option1" id="<%- obj[0] %>-r1">
+                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
                     <label class="form-check-label">
                         Plane
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="option2" id="<%- obj[0] %>-r2">
+                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
                     <label class="form-check-label">
                         Train
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="option3" id="<%- obj[0] %>-r3">
+                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
                     <label class="form-check-label">
                         Car
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="option4" id="<%- obj[0] %>-r4" checked>
+                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4" checked>
                     <label class="form-check-label">
                         None
                     </label>
                 </div>
+                <% i++; %>
             <% }) %>
             <div class="form-group">
                 <div class="form-check">
