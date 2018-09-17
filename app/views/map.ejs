@@ -14,13 +14,13 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 92%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
-        padding: 0;
+        padding: 10;
       }
       #floating-panel {
         position: absolute;
@@ -108,6 +108,9 @@
     </style>
   </head>
   <body>
+      <header>
+          <% include ../partials/header %>
+      </header>
     <div id="floating-panel">
       <input id="latlng" type="text">
       <input id="submit" type="button" value="Enter Coordinates">
