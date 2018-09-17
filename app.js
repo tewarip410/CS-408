@@ -83,6 +83,12 @@ app.post('/uploadLocations', function(req, res, next) {
   res.render('map');
 })
 
+app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
+  //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
+  console.log(req.body)
+  console.log(req.body.duration);
+})
+
 app.listen(8081, function() {
   console.log('app started on port 8081');
 });
