@@ -85,11 +85,26 @@ app.post('/uploadLocations', function(req, res, next) {
   res.render('map');
 })
 
+function call_api(api_call) {
+  return new Promise(function(resolve, reject) {
+    request(api_call, function(error, response, body) {
+      if (error) {
+        return reject(error);
+      }
+
+      var json = JSON.parse(body);
+      return resolve(json[0].airport);
+    });
+  });
+}
+
 app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
   //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
   var date = req.body.date;
   var round_trip = req.body.rt;
   var trip_data = [];
+  var promises = [];
+
   for (var i = 0; i < req.body.duration.length; i++) {
     var radio = "exampleRadios " + i;
 
@@ -99,22 +114,24 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
 
     var api_call = "https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
     var get_airport_code = api_call + "&latitude=" + lat + "&longitude=" + lng;
-    request(get_airport_code, function (error, response, body) {
-      var json = JSON.parse(body);
-      var data = [req.body.duration[i], req.body.order[i], req.body[radio], name, lat, lng, json[0].airport];
-      trip_data.push(data);
-    });
+    promises.push(call_api(get_airport_code));
   }
-  //ADD PROMISES TO DEAL WITH ASYNCHRONOUS CALLS
-  //sort trip_data by order
-  trip_data = trip_data.sort(function(a,b) {
-    return a[1] - b[1];
-  });
-  console.log(trip_data);
 
-  for (var i = 1; i < trip_data.length; i++) {
+  Promise.all(promises)
+    .then(function(data){
+      for (var i = 0; i < data.length; i++) {
+        var td = [req.body.duration[i], req.body.order[i], req.body[radio], name, lat, lng, data[i]];
+        trip_data.push(td)
+      }
 
-  }
+      trip_data = trip_data.sort(function(a,b) {
+        return a[1] - b[1];
+      });
+      console.log(trip_data);
+    
+      for (var i = 1; i < trip_data.length; i++) {}
+    })
+    .catch(function(err){});
 })
 
 app.listen(8081, function() {
