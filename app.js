@@ -21,7 +21,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './app/views'));
 
@@ -40,16 +40,13 @@ require('./app/server/config/passport.js')(passport);
 
 const authRouter = require('./app/server/routes/auth.js');
 const indexRouter = require('./app/server/routes/index.js');
+const mainRouter = require('./app/server/routes/main');
 
 const authController = require('./app/server/controllers/auth');
 
+app.use('/', mainRouter);
 app.use('/auth', authRouter);
 app.use('/index', indexRouter);
-
-
-app.get('/', authController.ensureAuthenticated, (req, res) => {
-  res.render('home');
-});
 
 app.get('/map', function(req, res) {
   res.render('map');

@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Attach",
+          "type": "node",
+          "request": "attach",
+          "port": 5858,
+          "protocol": "inspector",
+          "address": "localhost",
+          "restart": true,
+          "sourceMaps": false,
+          "outFiles": null,
+          "localRoot": "${workspaceRoot}",
+          "remoteRoot": "/code"
+      }
+  ]
+}
