@@ -16,7 +16,9 @@
       <link rel="stylesheet" href="/public/css/<%=stylesheet%>">
     <% } %>
   <body>
-    <%- include('../includes/navbar.ejs') %>
+    <header>
+      <% include ../../partials/header %>
+    </header>
     <%- include('./' + page) %>
     <%- include('../includes/scripts.ejs') %>
   </body>

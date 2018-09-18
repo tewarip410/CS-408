@@ -21,7 +21,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './app/views'));
 
@@ -62,6 +62,10 @@ app.get('/', authController.ensureAuthenticated, (req, res) => {
   res.render('home');
 });
 
+app.get('/splash', authController.ensureUnauthenticated, (req, res) => {
+  res.render('splash');
+});
+
 app.get('/map', function(req, res) {
   res.render('map');
 })
@@ -75,6 +79,7 @@ app.get('/form', function(req, res) {
 		res.redirect('/map');
   }
   else {
+    console.log(req.session.data);
     res.render('form', {data: req.session.data});
   }
 })
@@ -82,7 +87,7 @@ app.get('/form', function(req, res) {
 app.post('/uploadLocations', function(req, res, next) {
   //console.log(req.body.location_data[0][0]); - for reference
   req.session.data = req.body;
-  res.render('map');
+  res.render('forms/map');
 })
 
 app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
