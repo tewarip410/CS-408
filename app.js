@@ -56,6 +56,8 @@ app.use(sessions({
     }
 }));
 
+var request = require('request');
+
 app.get('/', authController.ensureAuthenticated, (req, res) => {
   res.render('home');
 });
@@ -91,11 +93,28 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
   for (var i = 0; i < req.body.duration.length; i++) {
     var radio = "exampleRadios " + i;
 
-    data = [req.body.duration[i], req.body.order[i], req.body[radio]];
-    trip_data.push(data);
-  }
+    var name = req.session.data.location_data[i][0];
+    var lat = req.session.data.location_data[i][1];
+    var lng = req.session.data.location_data[i][2];
 
+    var api_call = "https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
+    var get_airport_code = api_call + "&latitude=" + lat + "&longitude=" + lng;
+    request(get_airport_code, function (error, response, body) {
+      var json = JSON.parse(body);
+      var data = [req.body.duration[i], req.body.order[i], req.body[radio], name, lat, lng, json[0].airport];
+      trip_data.push(data);
+    });
+  }
+  //ADD PROMISES TO DEAL WITH ASYNCHRONOUS CALLS
+  //sort trip_data by order
+  trip_data = trip_data.sort(function(a,b) {
+    return a[1] - b[1];
+  });
   console.log(trip_data);
+
+  for (var i = 1; i < trip_data.length; i++) {
+
+  }
 })
 
 app.listen(8081, function() {
