@@ -9,18 +9,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-    <title>Removing Markers</title>
+    <title>Step 1</title>
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 70%;
+        height: 92%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
-        padding: 0;
+        padding: 10;
       }
       #floating-panel {
         position: absolute;
@@ -108,6 +108,9 @@
     </style>
   </head>
   <body>
+      <header>
+          <% include ../partials/header %>
+      </header>
     <div id="floating-panel">
       <input id="latlng" type="text">
       <input id="submit" type="button" value="Enter Coordinates">
@@ -116,11 +119,6 @@
     </div>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
-    <div class="container">
-      <p>Enter a start date</p>
-      <input data-date-format="mm/dd/yyyy" id="datepicker">
-    </div>
-    <div class="container" id="form-container"></div>
     <script>
 
       // In the following example, markers appear when the user clicks on the map.
@@ -277,28 +275,21 @@
       }
 
       function submitMarkers() {
-        var html = "<form>";
+        var location_data = [];
+        
         for (var i = 0; i < markers.length; i++) {
-          var location = [markers[i].position.lat(), markers[i].position.lng(), markers[i].title];
-          if (i === 0) {
-            html += "<p>" + markers[i].title + " - Start Location" + "</p>";
-          }
-          else if (i === markers.length - 1) {
-            html += "<p>" + markers[i].title + " - End Location" + "</p>";
-          }
-          else {
-            html += "<p>" + markers[i].title + "</p>";
-            html += "<div class=\"row\"><div class=\"col\"><input type=\"text\" class=\"form-control\" placeholder=\"Duration of Stay\"></div>";
-            html += "<div class=\"form-check form-check-inline\"><input class=\"form-check-input\" type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio1\" value=\"option1\">";
-            html += "<label class=\"form-check-label\" for=\"inlineRadio1\">Plane</label></div>";
-            html += "<div class=\"form-check form-check-inline\"><input class=\"form-check-input\" type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio2\" value=\"option2\">";
-            html += "<label class=\"form-check-label\" for=\"inlineRadio2\">Car</label></div>";
-            html += "<div class=\"form-check form-check-inline\"><input class=\"form-check-input\" type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio3\" value=\"option3\">";
-            html += "<label class=\"form-check-label\" for=\"inlineRadio3\">Train</label></div></div>";
-          }
+          var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng()];
+          location_data.push(data);
         }
-        html += "<button type=\"button\" class=\"btn btn-primary\">Plan my vacation!</button></form>";
-        $('#form-container').html(html);
+
+        $.ajax({
+          url: '/uploadLocations',
+          type: 'POST',
+          data: {location_data},
+          success: function(data) {
+            window.location.pathname = "form";
+          }
+        });
       }
 
       $('#datepicker').datepicker({
