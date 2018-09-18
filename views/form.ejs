@@ -1,57 +1,3 @@
-<!-- <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-        <form id="tripForm">
-            <ul id="progressbar">
-                <li class="active">Mode of Transportation</li>
-                <li></li>
-            </ul>
-            <fieldset class="tab">
-                <h2>Mode of Transportation</h2>
-                <div class="form-group">
-                        <label for="sel1">Select your preferred mode of transportation</label>
-                        <select class="form-control" id="sel1">
-                          <option>CAR</option>
-                          <option>AIRPLANE</option>
-                          <option>TRAIN</option>
-                          <option>BUS</option>
-                          <option>BOAT</option>
-                        </select>
-                      </div>
-                      <input type="button" name="next" class="next action-button" value="Next"/>
-            </fieldset>
-            <fieldset class="tab">
-                test
-            </fieldset>
-
-
-        </form>
-
-    </div>
-
-
-</div>
-
-<script>
-    var currentTab = 0;
-    nextStep(currentTab);
-
-    function nextStep(current) {
-        var x = document.getElementsByClassName("tab");
-        x[current].style.display = "block";
-
-        if (current==(x.length - 1)) {
-            document.getElementsByName("next").innerHTML = "submit";
-        }
-        else {
-            document.getElementsByName("next").innerHTML = "next";
-            }
-    }
-        
-    
-</script>
-
- -->
-
  <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -133,6 +79,11 @@ button:hover {
 .step.finish {
   background-color: #4CAF50;
 }
+
+#airplane, #car {
+  display: inline-flex;
+}
+
 </style>
 
 
@@ -146,18 +97,50 @@ button:hover {
     <p><input placeholder="Last name..." oninput="this.className = ''" name="lname"></p> -->
     <div class="form-group"><h2>Mode of Transportation</h2>
             <label for="sel1">Select your preferred mode of transportation</label>
-            <select class="form-control" id="sel1">
-              <option>CAR</option>
-              <option>AIRPLANE</option>
-              <option>TRAIN</option>
-              <option>BUS</option>
-              <option>BOAT</option>
+            <select class="form-control" id="sel1" onChange="showOptionForTravel();">
+              <option value="0">Select an option</option>
+              <option value="1">CAR</option>
+              <option value="2">AIRPLANE</option>
+              <option value="3">TRAIN</option>
+              <option value="4">BUS</option>
+              <option value="5">BOAT</option>
             </select>
+            <br>
+            <label>How many people are traveling?</label>
+            
           </div>
   </div>
-  <div class="tab">Contact Info:
-    <p><input placeholder="E-mail..." oninput="this.className = ''" name="email"></p>
-    <p><input placeholder="Phone..." oninput="this.className = ''" name="phone"></p>
+  <div>
+  <span id="airplane">
+      <input type="checkbox" value="AA"> American Airlines </input>
+      <input type="checkbox" value="SW"> Southwest </input>
+  </span>
+</div>
+  <span id="car">
+      <input type="checkbox" value="rental"> Rental </input>
+      <input type="checkbox" value="uber">  Uber </input>
+  </span>
+  <span id="train">
+      not sure
+  </span>
+  <span id="bus">
+      not sure
+  </span>
+  <span id="boat" style="display: none;">
+      not sure
+  </span>
+ 
+  <div class="tab"> <h2>Accomodation Information</h2>
+    <h3>Location A</h3>
+    <select class="form-control" id="hotelSelection" onChange="">
+        <option value="0">Select an option</option>
+        <option value="1">Marriot</option>
+        <option value="2">Hilton</option>
+        <option value="3">Hampton</option>
+        <option value="4">Holiday Inn</option>
+        <option value="5">Baymont Inn</option>
+      </select>
+    <p><input placeholder="Length of Stay" oninput="this.className = ''" name="email"></p>
   </div>
   <div class="tab">Birthday:
     <p><input placeholder="dd" oninput="this.className = ''" name="dd"></p>
@@ -184,8 +167,57 @@ button:hover {
 </form>
 
 <script>
-var currentTab = 0; // Current tab is set to be the first tab (0)
-showTab(currentTab); // Display the crurrent tab
+var currentTab = 0; // Current tab is set to be theel first tab (0)
+showTab(currentTab); // Display the current tab
+showOptionForTravel();
+
+
+function showOptionForTravel() {
+  var travelOption = document.getElementById("sel1").value;
+
+  if (travelOption == 0) {
+    document.getElementById("car").style.display = 'none';
+    document.getElementById("airplane").style.display = 'none';
+    document.getElementById("train").style.display = 'none';
+    document.getElementById("bus").style.display = 'none';
+    document.getElementById("boat").style.display = 'none';
+  }
+  if (travelOption == 1) {
+    document.getElementById("car").style.display = '';
+    document.getElementById("airplane").style.display = 'none';
+    document.getElementById("train").style.display = 'none';
+    document.getElementById("bus").style.display = 'none';
+    document.getElementById("boat").style.display = 'none';
+  }
+  else if (travelOption == 2) {
+    document.getElementById("car").style.display = 'none';
+    document.getElementById("airplane").style.display = '';
+    document.getElementById("train").style.display = 'none';
+    document.getElementById("bus").style.display = 'none';
+    document.getElementById("boat").style.display = 'none';
+  }
+  else if (travelOption == 3) {
+    document.getElementById("car").style.display = 'none';
+    document.getElementById("airplane").style.display = 'none';
+    document.getElementById("train").style.display = '';
+    document.getElementById("bus").style.display = 'none';
+    document.getElementById("boat").style.display = 'none';
+  }
+  else if (travelOption == 4) {
+    document.getElementById("car").style.display = 'none';
+    document.getElementById("airplane").style.display = 'none';
+    document.getElementById("train").style.display = 'none';
+    document.getElementById("bus").style.display = '';
+    document.getElementById("boat").style.display = 'none';
+  }
+  else if (travelOption == 5) {
+    document.getElementById("car").style.display = 'none';
+    document.getElementById("airplane").style.display = 'none';
+    document.getElementById("train").style.display = 'none';
+    document.getElementById("bus").style.display = 'none';
+    document.getElementById("boat").style.display = '';
+  }
+}
 
 function showTab(n) {
   // This function will display the specified tab of the form...
@@ -201,10 +233,28 @@ function showTab(n) {
     document.getElementById("nextBtn").innerHTML = "Submit";
   } else {
     document.getElementById("nextBtn").innerHTML = "Next";
+    showNone();
   }
+  
+  
+  // var a = document.getElementById("sel1").value == "1";
+  // if (n == 0 && a) {
+  //   console.log("VALUE = 1");
+  // }
+  // else {
+    
+  // }
   //... and run a function that will display the correct step indicator:
   fixStepIndicator(n)
 }
+
+  function showNone() {
+    document.getElementById("car").style.display = 'none';
+    document.getElementById("airplane").style.display = 'none';
+    document.getElementById("train").style.display = 'none';
+    document.getElementById("bus").style.display = 'none';
+    document.getElementById("boat").style.display = 'none';
+  }
 
 function nextPrev(n) {
   // This function will figure out which tab to display
