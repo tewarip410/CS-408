@@ -2,6 +2,7 @@ version: "3"
 
 services:
   web:
+    restart: always
     build: .
     command: nodemon --inspect=5858 app.js
     volumes:
@@ -9,3 +10,17 @@ services:
     ports:
       - "8081:8081"
       - "5858:5858"
+    links:
+      - mongo
+      # TODO: figure out how to wait for db to be started
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017:27017"
