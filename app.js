@@ -85,7 +85,7 @@ app.post('/uploadLocations', function(req, res, next) {
   res.render('map');
 })
 
-function call_api(api_call) {
+function call_api(api_call, return_info) {
   return new Promise(function(resolve, reject) {
     request(api_call, function(error, response, body) {
       if (error) {
@@ -93,33 +93,42 @@ function call_api(api_call) {
       }
 
       var json = JSON.parse(body);
-      return resolve(json[0].airport);
+      if (return_info === 1) { //return airport code
+        return resolve(json[0].airport);
+      }
+      else if (return_info === 2) { //return airfare information
+        return resolve(json);
+      }
+      else if (return_info === 3) { //return hotel information
+        return resolve(json);
+      }
     });
   });
 }
 
 app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
   //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
-  var date = req.body.date;
+  var date = (req.body.date).split('/');
+  date = date[2] + '-' + date[0] + '-' + date[1];
   var round_trip = req.body.rt;
   var trip_data = [];
   var promises = [];
 
   for (var i = 0; i < req.body.duration.length; i++) {
-    var radio = "exampleRadios " + i;
-
-    var name = req.session.data.location_data[i][0];
     var lat = req.session.data.location_data[i][1];
     var lng = req.session.data.location_data[i][2];
-
     var api_call = "https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
     var get_airport_code = api_call + "&latitude=" + lat + "&longitude=" + lng;
-    promises.push(call_api(get_airport_code));
+    promises.push(call_api(get_airport_code, 1));
   }
 
   Promise.all(promises)
     .then(function(data){
       for (var i = 0; i < data.length; i++) {
+        var radio = "exampleRadios " + i;
+        var name = req.session.data.location_data[i][0];
+        var lat = req.session.data.location_data[i][1];
+        var lng = req.session.data.location_data[i][2];
         var td = [req.body.duration[i], req.body.order[i], req.body[radio], name, lat, lng, data[i]];
         trip_data.push(td)
       }
@@ -129,9 +138,31 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
       });
       console.log(trip_data);
     
-      for (var i = 1; i < trip_data.length; i++) {}
-    })
-    .catch(function(err){});
+      var trip_promises = [];
+      for (var i = 0; i < trip_data.length; i++) {
+        if (trip_data[i][2] === 'plane') {
+          if (i < 1) {
+            console.log("Cannot route flight from origin to origin!");
+            continue;
+          }
+          else {
+            var origin = trip_data[i-1][6];
+            var destination = trip_data[i][6];
+            api_call = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
+            api_call = api_call + "&origin=" + origin + "&destination=" + destination + "&departure_date=" + date;
+            console.log(api_call);
+            trip_promises.push(call_api(api_call, 2));
+          }
+        }
+      }
+
+      Promise.all(trip_promises)
+        .then(function(data) {
+          console.log(data);
+          console.log(data['results']);
+        }).catch(function(err){});
+
+    }).catch(function(err){});
 })
 
 app.listen(8081, function() {
