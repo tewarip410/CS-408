@@ -158,6 +158,7 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
       console.log(dates);
     
       var trip_promises = [];
+      var hotel_promises = [];
       for (var i = 0; i < trip_data.length; i++) {
         if (trip_data[i][2] === 'plane') {
           if (i < 1) {
@@ -174,22 +175,27 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
             trip_promises.push(call_api(api_call, 2));
           }
         }
-        else if (trip_data[i][2] === 'hotel') {} //won't work right now because option is a radio button because I'm stupid - assume after 1st location a hotel is needed
 
         if (i > 0) {
           var location = trip_data[i][6];
           var check_in = dates[i][0];
           var check_out = dates[i][1];
+          api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
+          api_call = api_call + "&location=" + location + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD";
+          hotel_promises.push(call_api(api_call, 3));
         }
       }
 
+      var itinerary = [];
+      var flight_prices = [];
+      var hotels = [];
+      var hotel_prices = [];
+
       Promise.all(trip_promises)
         .then(function(data) {
-          var itinerary = [];
-          var prices = [];
           for (var j = 0; j < data.length; j++) {
             var flight = data[j].results[0].itineraries[0].outbound.flights;
-            prices.push(data[j].results[0].fare.total_price);
+            flight_prices.push(data[j].results[0].fare.total_price);
             for (var i = 0 ; i < flight.length; i++) {
               var origin = flight[i].origin.airport;
               var dest = flight[i].destination.airport;
@@ -202,9 +208,26 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
               itinerary.push(plan);
             }
           }
-          console.log(itinerary);
-          console.log('------')
-          console.log(prices);
+
+          Promise.all(hotel_promises)
+            .then(function(data) {
+              console.log(itinerary);
+              console.log('------')
+              console.log(flight_prices);
+              for (var i = 0; i < data.length; i++) {
+                var res = data[i].results[0];
+                hotel_prices.push(res.total_price.amount);
+                var name = res.property_name;
+                var addr = res.address.line1 + " " + res.address.city + ", " + res.address.region + " " + res.address.postal_code + ", " + res.address.country;
+                hotels.push([name, addr]);
+              }
+
+              console.log('-----');
+              console.log(hotels);
+              console.log('-----');
+              console.log(hotel_prices);
+            }).catch(function(err){});
+
         }).catch(function(err){});
 
     }).catch(function(err){});
