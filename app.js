@@ -138,7 +138,24 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
       trip_data = trip_data.sort(function(a,b) {
         return a[1] - b[1];
       });
+
+      var dates = [];
+      //compute start and end dates for all parts of a trip
+      for (var i = 0; i < trip_data.length; i++) {
+        var start_date;
+        if (i == 0) {
+          dates.push([date, date]);
+        }
+        else {
+          start_date = date;
+          var date_split = date.split('-');
+          date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(trip_data[i][0]) + 1, 'days');
+          date = moment(date).format("YYYY-MM-DD");
+          dates.push([start_date, date]);
+        }
+      }
       console.log(trip_data);
+      console.log(dates);
     
       var trip_promises = [];
       for (var i = 0; i < trip_data.length; i++) {
@@ -150,20 +167,19 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
           else {
             var origin = trip_data[i-1][6];
             var destination = trip_data[i][6];
-            var date_split = date.split('-');
-            if (Number(trip_data[i-1][0]) != 0) {
-              date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(trip_data[i-1][0]), 'days');
-            }
-            date = moment(date).format("YYYY-MM-DD");
-            console.log(date);
+
             api_call = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
-            api_call = api_call + "&origin=" + origin + "&destination=" + destination + "&departure_date=" + date;
+            api_call = api_call + "&origin=" + origin + "&destination=" + destination + "&departure_date=" + dates[i][0];
             console.log(api_call);
             trip_promises.push(call_api(api_call, 2));
           }
         }
-        else if (trip_data[i][2] === 'hotel') {
+        else if (trip_data[i][2] === 'hotel') {} //won't work right now because option is a radio button because I'm stupid - assume after 1st location a hotel is needed
 
+        if (i > 0) {
+          var location = trip_data[i][6];
+          var check_in = dates[i][0];
+          var check_out = dates[i][1];
         }
       }
 
