@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('passport');
+const moment = require('moment');
 const session = require('express-session');
 // const RedisStore = require('connect-redis')(session);
 // const flash = require('express-flash');
@@ -110,6 +111,7 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
   //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
   var date = (req.body.date).split('/');
   date = date[2] + '-' + date[0] + '-' + date[1];
+  console.log(date);
   var round_trip = req.body.rt;
   var trip_data = [];
   var promises = [];
@@ -148,18 +150,45 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
           else {
             var origin = trip_data[i-1][6];
             var destination = trip_data[i][6];
+            var date_split = date.split('-');
+            if (Number(trip_data[i-1][0]) != 0) {
+              date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(trip_data[i-1][0]), 'days');
+            }
+            date = moment(date).format("YYYY-MM-DD");
+            console.log(date);
             api_call = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
             api_call = api_call + "&origin=" + origin + "&destination=" + destination + "&departure_date=" + date;
             console.log(api_call);
             trip_promises.push(call_api(api_call, 2));
           }
         }
+        else if (trip_data[i][2] === 'hotel') {
+
+        }
       }
 
       Promise.all(trip_promises)
         .then(function(data) {
-          console.log(data);
-          console.log(data['results']);
+          var itinerary = [];
+          var prices = [];
+          for (var j = 0; j < data.length; j++) {
+            var flight = data[j].results[0].itineraries[0].outbound.flights;
+            prices.push(data[j].results[0].fare.total_price);
+            for (var i = 0 ; i < flight.length; i++) {
+              var origin = flight[i].origin.airport;
+              var dest = flight[i].destination.airport;
+              var departure = flight[i].departs_at;
+              var arrival = flight[i].arrives_at;
+              var airline = flight[i].operating_airline;
+              var flight_number = flight[i].flight_number;
+              var travel_class = flight[i].booking_info.travel_class;
+              var plan = [departure, arrival, origin, dest, airline, flight_number, travel_class];
+              itinerary.push(plan);
+            }
+          }
+          console.log(itinerary);
+          console.log('------')
+          console.log(prices);
         }).catch(function(err){});
 
     }).catch(function(err){});
