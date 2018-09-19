@@ -215,10 +215,10 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
               console.log('------')
               console.log(flight_prices);
               for (var i = 0; i < data.length; i++) {
-                var res = data[i].results[0];
-                hotel_prices.push(res.total_price.amount);
-                var name = res.property_name;
-                var addr = res.address.line1 + " " + res.address.city + ", " + res.address.region + " " + res.address.postal_code + ", " + res.address.country;
+                var result = data[i].results[0];
+                hotel_prices.push(result.total_price.amount);
+                var name = result.property_name;
+                var addr = result.address.line1 + " " + result.address.city + ", " + result.address.region + " " + result.address.postal_code + ", " + result.address.country;
                 hotels.push([name, addr]);
               }
 
@@ -226,6 +226,8 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
               console.log(hotels);
               console.log('-----');
               console.log(hotel_prices);
+
+              res.render('itinerary', {flights: itinerary, flight_prices: flight_prices, hotels: hotels, hotel_prices: hotel_prices});
             }).catch(function(err){});
 
         }).catch(function(err){});
