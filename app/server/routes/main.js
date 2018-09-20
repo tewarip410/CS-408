@@ -5,9 +5,9 @@ const mainController = require('../controllers/main');
 const authController = require('../controllers/auth');
 
 router.get('/', authController.ensureAuthenticated, (req, res) => {
-  res.render('forms/main-form-layout',
+  res.render('forms/create-form-layout',
     {
-      page: 'map.ejs',
+      page: 'create-map.ejs',
       stylesheet: 'map.css',
       title: 'Select Locations • Adventum',
       user: req.user
@@ -15,6 +15,12 @@ router.get('/', authController.ensureAuthenticated, (req, res) => {
   );
 });
 
-router.post('/', authController.ensureAuthenticated, mainController.mapPost);
+router.get('/splash', authController.ensureUnauthenticated, (req, res) => {
+  res.render('splash');
+});
+
+router.get('/*', (req, res) => {
+  res.render('notfound');
+});
 
 module.exports = router;

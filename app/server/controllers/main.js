@@ -12,7 +12,7 @@ module.exports = {
     }
     return res.render('forms/main-form-layout',
     {
-      page: 'itinerary.ejs',
+      page: 'itinerary-form.ejs',
       title: 'Plan Vacation • Adventum',
       markers
     }

@@ -169,11 +169,11 @@
         }
 
         $.ajax({
-          url: '/uploadLocations',
+          url: '/trips',
           type: 'POST',
           data: {location_data},
           success: function(data) {
-            window.location.pathname = "form";
+            window.location.pathname = "trips/create/details";
           }
         });
       }
