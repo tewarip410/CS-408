@@ -9,7 +9,8 @@ router.get('/', authController.ensureAuthenticated, (req, res) => {
     {
       page: 'map.ejs',
       stylesheet: 'map.css',
-      title: 'Select Locations • Adventum'
+      title: 'Select Locations • Adventum',
+      user: req.user
     }
   );
 });

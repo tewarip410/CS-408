@@ -61,11 +61,6 @@ app.use(sessions({
 
 var request = require('request');
 
-/* root, splash, and 404 are the only endpoints that remain here; everything else is in the /routes directory */
-app.get('/', authController.ensureAuthenticated, (req, res) => {
-  res.render('home');
-});
-
 app.get('/splash', authController.ensureUnauthenticated, (req, res) => {
   res.render('splash');
 });
