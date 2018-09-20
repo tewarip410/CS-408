@@ -5,7 +5,7 @@ const path = require('path');
 const passport = require('passport');
 const moment = require('moment');
 const session = require('express-session');
-// const RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis')(session);
 // const flash = require('express-flash');
 // const reqFlash = require('req-flash');
 // const methodOverride = require('method-override');
@@ -31,7 +31,9 @@ app.use(require('express-session')({
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) }, // 4 hours
+  store: new RedisStore({
+    url: process.env.REDIS_URL
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
