@@ -237,7 +237,7 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
               console.log(hotels);
               console.log('-----');
               console.log(hotel_prices);
-
+              console.log('here')
               res.render('itinerary', {flights: itinerary, flight_prices: flight_prices, hotels: hotels, hotel_prices: hotel_prices});
             }).catch(function(err){});
 
