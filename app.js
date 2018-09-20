@@ -66,6 +66,10 @@ app.get('/splash', authController.ensureUnauthenticated, (req, res) => {
   res.render('splash');
 });
 
+app.get('/profile', authController.ensureAuthenticated, (req, res) => {
+  res.render('profile', {user: req.user});
+});
+
 app.get('/map', function(req, res) {
   res.render('map');
 })
