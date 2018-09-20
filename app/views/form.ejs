@@ -12,49 +12,68 @@
     <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <title>Step 2</title>
   </head>
-  <body>
+  <body class="bg-light">
     <header>
         <% include ../partials/header %>
     </header>
+<<<<<<< HEAD
     <% if (data && data.location_data) { %>
         <form action="planTravel" method="post" id="travel_form">
             <label for="datepicker">Enter a start date</label>
             <input name="date" id="datepicker" width="276" />
+=======
+    <% if (data) { %>
+        <form action="planTravel" method="post" id="travel_form" style="text-align: center">
+            
+            <br>
+            <span class="form-inline">
+                <div class="mx-auto form-inline"><label class="pr-3" for="datepicker" >Start date</label>
+                <input name="date" id="datepicker" width="276" /></div>
+            </span>
+            <br>
+            
+>>>>>>> updateForm
             <% var i = 0; %>
             <% data.location_data.forEach(function(obj) { %>
                 <div class="form-group">
-                    <label><%- obj[0] %></label>
-                    <input type="text" placeholder="Duration of stay" class="form-control" name="duration" id="<%- obj[0] %>-stay">
+                    <label class="h5"><%- obj[0] %></label>
+                    <span class="form-inline">
+                            <div class="mx-auto form-inline"><input type="text" placeholder="Duration of stay" class="form-control mr-3" name="duration" id="<%- obj[0] %>-stay">
+                        <input type="text" placeholder="Order" class="form-control" name="order" id="<%- obj[0] %>-order"></div>
+                    </span>
+                    
                 </div>
-                <div class="form-group">
-                    <input type="text" placeholder="Order" class="form-control" name="order" id="<%- obj[0] %>-order">
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
-                    <label class="form-check-label">
-                        Plane
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
-                    <label class="form-check-label">
-                        Train
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
-                    <label class="form-check-label">
-                        Car
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4" checked>
-                    <label class="form-check-label">
-                        None
-                    </label>
-                </div>
+                <span class="form-check form-check-inline pb-4">
+                        <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
+                                <label class="form-check-label">
+                                    Plane
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
+                                <label class="form-check-label">
+                                    Train
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
+                                <label class="form-check-label">
+                                    Car
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4" checked>
+                                <label class="form-check-label">
+                                    None
+                                </label>
+                            </div>
+                </span>
+                
                 <% i++; %>
             <% }) %>
+     
+
             <div class="form-group">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="rt" id="gridCheck">
@@ -63,7 +82,10 @@
                     </label>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Plan my vacation!</button>
+            
+            <button type="button" class="btn btn-primary">Plan my vacation!</button>
+            <a href="http://localhost:8081/map" id="cancel" name="cancel" class="btn btn-primary">Cancel<a>
+        
         </form>
     <% } %>
     
@@ -71,6 +93,7 @@
         $('#datepicker').datepicker({
             uiLibrary: 'bootstrap4'
         });
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     </body>
