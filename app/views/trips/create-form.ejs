@@ -2,7 +2,7 @@
 <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css" />
   <div class="bg-light">
     <% if (locals.data) { %>
-        <form method="post" id="travel_form" style="text-align: center">
+        <form onsubmit="return checker();" method="post" id="travel_form" style="text-align: center">
 
             <br>
             <span class="form-inline">
@@ -78,7 +78,7 @@
             </div>
             <br>
  
-            <button type="submit" class="btn btn-primary" onclick="checker()">Plan my vacation!</button>
+            <button type="submit" class="btn btn-primary">Plan my vacation!</button>
             <a href="http://localhost:8081/" id="cancel" name="cancel" class="btn btn-primary">Cancel<a>
         
         </form>
@@ -108,7 +108,12 @@
             else {
                 checked = false;
             }
-            if (durationInput && durationInput.value) {
+            if (durationInput) {
+                for (var i = 0; i < durationInput.length; i++) {
+                    if (!durationInput[i].value) {
+                        checked = false;
+                    }
+                }
                 console.log("duration checked")
             }
             else {
@@ -140,7 +145,7 @@
             if (checked == false) {
                 alert("Form is not completed. Please go back and check.");
             }
-            
+            return checked;
         }
 
     </script>
