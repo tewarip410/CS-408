@@ -39,6 +39,7 @@ module.exports = {
     date = date[2] + '-' + date[0] + '-' + date[1];
     console.log(date);
     const round_trip = req.body.rt;
+    const option = req.body.optradio;
     let trip_data = [];
     const promises = [];
 
@@ -103,6 +104,9 @@ module.exports = {
 
           api_call = "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
           api_call = api_call + "&origin=" + origin + "&destination=" + destination + "&departure_date=" + dates[i][0];
+          if (option == 'te') {
+            api_call = api_call + "&nonstop=true";
+          }
           console.log(api_call);
           trip_promises.push(call_api(api_call, 2));
         }
