@@ -68,12 +68,12 @@
 
             <div class="form-check form-check-inline" >
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" value="ce">Cost Efficient
+                    <input type="radio" class="form-check-input" name="optradio" id="1" value="ce">Cost Efficient
                 </label>
             </div>
             <div class="form-check form-check-inline pb-4">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" value="te">Time Efficient
+                    <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Time Efficient
                 </label>
             </div>
             <br>
@@ -99,6 +99,8 @@
             var durationInput = document.getElementsByName("duration");
             var orderInput = document.getElementsByClassName("form-control");
             var titleInput = document.getElementById("title");
+            var optionInput1 = document.getElementById("1");
+            var optionInput2 = document.getElementById("2");
 
             // console.log(orderInput);
             //     console.log(orderInput.value);
@@ -142,6 +144,10 @@
             //     !(orderInput && orderInput.value)){
             //     alert("Form is not completed. Please go back and check.")
             // }
+            if (!optionInput1.checked && !optionInput2.checked) {
+                checked = false;
+            }
+
             if (checked == false) {
                 alert("Form is not completed. Please go back and check.");
             }
