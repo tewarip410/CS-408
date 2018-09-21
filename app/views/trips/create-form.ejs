@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label class="h5"><%- obj[0] %></label>
                     <span class="form-inline">
-                            <div class="mx-auto form-inline"><input type="text " placeholder="Duration of stay" class="form-control mr-3 text-center" name="duration" id="<%- obj[0] %>-stay">
+                            <div class="mx-auto form-inline"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center" name="duration" id="<%- obj[0] %>-stay">
                         <input type="text" placeholder="Order" class="form-control text-center" name="order" id="<%- obj[0] %>-order"></div>
                     </span>
                     
@@ -97,7 +97,7 @@
             }
             var dateInput = document.getElementById("datepicker");
             var durationInput = document.getElementsByName("duration");
-            var orderInput = document.getElementsByClassName("form-control");
+            var orderInput = document.getElementsByName("order");
             var titleInput = document.getElementById("title");
             var optionInput1 = document.getElementById("1");
             var optionInput2 = document.getElementById("2");
@@ -121,6 +121,20 @@
             else {
                 checked = false;
             }
+
+            if (orderInput) {
+                console.log(orderInput);
+                for (var i = 0; i < orderInput.length; i++) {
+                    if (!orderInput[i].value) {
+                        checked = false;
+                    }
+                }
+                console.log("order checked")
+            }
+            else {
+                checked = false;
+            }
+
             if (titleInput && titleInput.value) {
                 console.log("title checked")
             }
@@ -128,22 +142,6 @@
                 checked = false;
             }
 
-            //something is wrong here - ask alexis ---> THE THING IS THAT FOR ORDER VALUE SOMETHING 
-            //WEIRD IS BEING OUTPUTTED INTO THE CONSOLE IDRK WHATS GOING IN....ALEXIS HELP :(
-                
-            // if (orderInput && orderInput.value) {
-                
-            //     console.log("order checked")
-            // }
-            // else {
-            //     checked = false;
-            //     console.log("something is wrong")
-            // }
-            // if (!(dateInput && dateInput.value) || 
-            //     !(durationInput && durationInput.value) || 
-            //     !(orderInput && orderInput.value)){
-            //     alert("Form is not completed. Please go back and check.")
-            // }
             if (!optionInput1.checked && !optionInput2.checked) {
                 checked = false;
             }
