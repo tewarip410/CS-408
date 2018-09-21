@@ -6,7 +6,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     }
-    return res.redirect('/auth/login');
+    return res.redirect('/splash');
   },
   // make sure user is not logged in
   ensureUnauthenticated: async (req, res, next) => {
