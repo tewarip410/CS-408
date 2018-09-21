@@ -82,7 +82,7 @@ module.exports = {
       else {
         start_date = date;
         var date_split = date.split('-');
-        date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(trip_data[i][0]) + 1, 'days');
+        date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(trip_data[i][0]), 'days');
         date = moment(date).format("YYYY-MM-DD");
         dates.push([start_date, date]);
       }
@@ -116,9 +116,12 @@ module.exports = {
         var location = trip_data[i][6];
         var check_in = dates[i][0];
         var check_out = dates[i][1];
-        api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
-        api_call = api_call + "&location=" + location + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD";
-        hotel_promises.push(call_api(api_call, 3));
+
+        if (check_in != check_out) {
+          api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
+          api_call = api_call + "&location=" + location + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD";
+          hotel_promises.push(call_api(api_call, 3));
+        }
       }
     }
 
