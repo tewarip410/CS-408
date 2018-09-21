@@ -64,51 +64,6 @@ app.get('/profile', authController.ensureAuthenticated, (req, res) => {
   res.render('profile', {user: req.user});
 });
 
-<<<<<<< HEAD
-app.get('/map', function(req, res) {
-  res.render('map');
-})
-
-app.get('/test', function(req, res) {
-  res.render('test');
-})
-
-app.get('/form', function(req, res) {
-  if (!req.session.data) {
-		res.redirect('/map');
-  }
-  else {
-    res.render('form', {data: req.session.data});
-  }
-})
-
-app.get('/splash', function(req, res) {
-  res.render('splash');
-})
-
-app.post('/uploadLocations', function(req, res, next) {
-  //console.log(req.body.location_data[0][0]); - for reference
-  req.session.data = req.body;
-  res.render('map');
-})
-
-app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
-  //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
-  var date = req.body.date;
-  var round_trip = req.body.rt;
-  var trip_data = [];
-  for (var i = 0; i < req.body.duration.length; i++) {
-    var radio = "exampleRadios " + i;
-
-    data = [req.body.duration[i], req.body.order[i], req.body[radio]];
-    trip_data.push(data);
-  }
-
-  console.log(trip_data);
-})
-
-=======
->>>>>>> 188adc15f5eb497be7446615c31dd110fce96259
 app.listen(8081, function() {
   console.log('app started on port 8081');
 });
