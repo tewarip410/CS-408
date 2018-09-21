@@ -143,8 +143,7 @@
       var delMarker = function (id) {
         marker = markers[id];
         marker.setMap(null);
-        delete markers[id];
-        console.log(markers);
+        markers[id] = null;
       }
 
       // Sets the map on all markers in the array.
@@ -176,8 +175,10 @@
         var location_data = [];
         
         for (var i = 0; i < markers.length; i++) {
-          var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng()];
-          location_data.push(data);
+          if (markers[i] !== null) {
+            var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng()];
+            location_data.push(data);
+          }
         }
 
         $.ajax({

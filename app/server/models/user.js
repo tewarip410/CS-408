@@ -5,19 +5,24 @@ const userSchema = Schema({
   name: String,
   email: String,
   googleId: String,
-  googleImg: String
+  googleImg: String,
+  bio: String
 
 });
 
 userSchema.statics.findOrCreate = async (profile, callback) => {
   try {
     let user = await User.findOne({ googleId: profile.id });
+    console.log(user);
+    console.log(profile);
     if (user) {
       user.googleImg = profile._json.image.url;
+      user.email = profile.emails[0].value;
       user.save();
       // TODO pull profile info from Google profile and set it in db
       return callback(null, user);
     }
+    // need _json for some reason... idk google is weird :(
     user = await User.create({ 
       email: profile.emails[0].value,
       googleId: profile.id,

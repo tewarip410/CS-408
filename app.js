@@ -44,10 +44,13 @@ require('./app/server/config/passport.js')(passport);
 const authRouter = require('./app/server/routes/auth.js');
 const mainRouter = require('./app/server/routes/main');
 const tripRouter = require('./app/server/routes/trips');
+const profileRouter = require('./app/server/routes/profiles');
+
 const authController = require('./app/server/controllers/auth');
 
 app.use('/auth', authRouter);
 app.use('/trips', tripRouter);
+app.use('/profiles', profileRouter);
 app.use('/', mainRouter);
 
 var sessions = require('client-sessions');
@@ -59,10 +62,6 @@ app.use(sessions({
         ephemeral: true //ends the cookie when the browser closes (not the window/tab but the browser itself)
     }
 }));
-
-app.get('/profile', authController.ensureAuthenticated, (req, res) => {
-  res.render('profile', {user: req.user});
-});
 
 app.listen(8081, function() {
   console.log('app started on port 8081');

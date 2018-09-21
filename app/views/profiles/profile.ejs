@@ -1,0 +1,17 @@
+<div class="container text-center">
+  <form method="post" action="/profiles/<%=user.googleId%>">
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" id="email" value="<%=user.email%>" disabled>
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="name" class="form-control" id="name" name="name" value="<%=user.name%>">
+    </div>
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <textarea class="form-control" id="bio" rows="3" name="bio"><%=user.bio%></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+</div>
