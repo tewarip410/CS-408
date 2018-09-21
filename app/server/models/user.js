@@ -22,7 +22,7 @@ userSchema.statics.findOrCreate = async (profile, callback) => {
       email: profile.emails[0].value,
       googleId: profile.id,
       name: profile.displayName,
-      googleImg: profile.image.url
+      googleImg: profile._json.image.url
     });
     return callback(null, user);
   } catch (err) {

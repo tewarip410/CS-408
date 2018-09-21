@@ -68,7 +68,7 @@
 
             <div class="form-check form-check-inline" >
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" id="1" value="ce">Cost Efficient
+                    <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cost Efficient
                 </label>
             </div>
             <div class="form-check form-check-inline pb-4">
@@ -112,7 +112,7 @@
             }
             if (durationInput) {
                 for (var i = 0; i < durationInput.length; i++) {
-                    if (!durationInput[i].value) {
+                    if (!durationInput[i].value || isNaN(durationInput[i].value || durationInput[i].value < 0)) {
                         checked = false;
                     }
                 }
@@ -125,7 +125,7 @@
             if (orderInput) {
                 console.log(orderInput);
                 for (var i = 0; i < orderInput.length; i++) {
-                    if (!orderInput[i].value) {
+                    if (!orderInput[i].value || isNaN(orderInput[i].value) || orderInput[i].value < 0) {
                         checked = false;
                     }
                 }
