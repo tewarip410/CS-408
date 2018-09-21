@@ -181,14 +181,16 @@
           }
         }
 
-        $.ajax({
-          url: '/trips',
-          type: 'POST',
-          data: {location_data},
-          success: function(data) {
-            window.location.pathname = "trips/create/details";
-          }
-        });
+        if (location_data.length > 0) {
+          $.ajax({
+            url: '/trips',
+            type: 'POST',
+            data: {location_data},
+            success: function(data) {
+              window.location.pathname = "trips/create/details";
+            }
+          });
+        }
       }
 
       $('#datepicker').datepicker({
