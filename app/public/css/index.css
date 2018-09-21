@@ -22,7 +22,7 @@ header,
 }
 
 #pic_logo {
-  height: 28%;
+  height: auto;
   width: 35%;
   margin-bottom: 20px;
 }
@@ -61,8 +61,10 @@ header,
   transform: translateY(-50%);
   z-index: 3;
 }
-.modal-body {
+.modal-content {
   height: 400px;
+  width: 300px;
+  text-align: center;
   background: url("../pics/modal.png")no-repeat center center;
   background-size: cover;
   -webkit-background-size: cover;
@@ -70,22 +72,22 @@ header,
   -o-background-size: cover;
   position: relative;
 }
+.modal-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
 .modal-header {
   border: 0px;
 }
 .pic-google {
   display: inline;
-
   height: 45px;
 }
-
-#googleBtnContainer {
-  float: right;
-  margin: .375rem;
+.modal-bottom {
+  transform: translateY(180%);
 }
-#googleBtnContainer:hover {
+#pic-google:hover {
   -webkit-transform: scale(1.02);
-
 }
 #modal-header {
   font-family: ;
