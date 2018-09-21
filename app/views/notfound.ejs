@@ -1,0 +1,20 @@
+<!-- TODO make this page look nice -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./includes/head.ejs %>
+    <title>404 • Adventum</title>
+  </head>
+  <body>
+    <% if (locals.user) { %>
+      <% include ../partials/header %>
+      <main class="container">
+        <h2 class="mt-3">Page not found</h2>
+      </main>
+    <% } else { %>
+      <main class="container">
+        <h1 class="mt-3">Adventum- Page not found</h1>
+      </main>
+    <% } %>
+  </body>
+</html>

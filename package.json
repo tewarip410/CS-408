@@ -10,12 +10,15 @@
   "license": "ISC",
   "dependencies": {
     "client-sessions": "^0.8.0",
+    "connect-redis": "^3.3.3",
     "dotenv": "^4.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "moment": "^2.22.2",
     "mongoose": "^5.2.14",
     "passport": "^0.4.0",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "request": "^2.88.0"
   }
 }

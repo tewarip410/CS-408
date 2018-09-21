@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login</title>
+    <title>Login • Adventum</title>
+    <style>
+      #google-signin {
+        height: 3rem;
+      }
+      #logo {
+        height: 5rem;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      #google-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+      .outer {
+        position: relative;
+        height: 100vh;
+      }
+    </style>
   </head>
   <body>
-    <a href="/auth/google">Sign In with Google</a>
+    <div class="outer">
+      <img id="logo" src="/public/assets/Adventum.png">
+      <div id="google-container">
+          <a href="/auth/google"><img id="google-signin" src="/public/assets/google_signin_buttons/web/2x/btn_google_signin_light_normal_web@2x.png"></a>
+      </div>
+    </div>
   </body>
 </html>
 

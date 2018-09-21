@@ -3,8 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('passport');
+const moment = require('moment');
 const session = require('express-session');
-// const RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis')(session);
 // const flash = require('express-flash');
 // const reqFlash = require('req-flash');
 // const methodOverride = require('method-override');
@@ -30,7 +31,9 @@ app.use(require('express-session')({
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) }, // 4 hours
+  store: new RedisStore({
+    url: process.env.REDIS_URL
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -39,12 +42,13 @@ app.use('/views/includes', express.static(path.join(__dirname, 'includes')));
 require('./app/server/config/passport.js')(passport);
 
 const authRouter = require('./app/server/routes/auth.js');
-const indexRouter = require('./app/server/routes/index.js');
-
+const mainRouter = require('./app/server/routes/main');
+const tripRouter = require('./app/server/routes/trips');
 const authController = require('./app/server/controllers/auth');
 
 app.use('/auth', authRouter);
-app.use('/index', indexRouter);
+app.use('/trips', tripRouter);
+app.use('/', mainRouter);
 
 var sessions = require('client-sessions');
 app.use(sessions({
@@ -56,10 +60,11 @@ app.use(sessions({
     }
 }));
 
-app.get('/', authController.ensureAuthenticated, (req, res) => {
-  res.render('home');
+app.get('/profile', authController.ensureAuthenticated, (req, res) => {
+  res.render('profile', {user: req.user});
 });
 
+<<<<<<< HEAD
 app.get('/map', function(req, res) {
   res.render('map');
 })
@@ -102,6 +107,8 @@ app.post('/planTravel', function(req, res, next) { //Travel API calls go here!
   console.log(trip_data);
 })
 
+=======
+>>>>>>> 188adc15f5eb497be7446615c31dd110fce96259
 app.listen(8081, function() {
   console.log('app started on port 8081');
 });
