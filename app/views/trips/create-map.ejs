@@ -129,10 +129,22 @@
                 map: map,
                 title: results[0].formatted_address
               });
+              var index = markers.length;
               markers.push(marker);
+              marker.addListener('click', function(event) {
+                delMarker(index);
+              });
             }
           }
         });
+        
+      }
+
+      var delMarker = function (id) {
+        marker = markers[id];
+        marker.setMap(null);
+        delete markers[id];
+        console.log(markers);
       }
 
       // Sets the map on all markers in the array.
