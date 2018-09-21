@@ -8,7 +8,7 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 // const flash = require('express-flash');
 // const reqFlash = require('req-flash');
-// const methodOverride = require('method-override');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -21,6 +21,7 @@ const db = mongoose.connection;
 // bind mongo error
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+app.use(methodOverride('_method'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -51,6 +52,7 @@ const authController = require('./app/server/controllers/auth');
 app.use('/auth', authRouter);
 app.use('/trips', tripRouter);
 app.use('/profiles', profileRouter);
+
 app.use('/', mainRouter);
 
 var sessions = require('client-sessions');

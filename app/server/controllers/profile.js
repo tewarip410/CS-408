@@ -20,7 +20,6 @@ module.exports = {
   },
   profilePost: async (req, res) => {
     const {googleId} = req.user;
-    console.log(req.body);
     const {name} = req.body;
     const {bio} = req.body;
     
@@ -28,9 +27,14 @@ module.exports = {
 
     user.name = name;
     user.bio = bio;
-    user.save();
+    await user.save();
 
     res.redirect(`/profiles/${googleId}`);    
-
+  },
+  profileDelete: async (req, res) => {
+    const { user } = req;
+    await user.remove();
+    req.logout();
+    res.redirect('/');
   }
 };
