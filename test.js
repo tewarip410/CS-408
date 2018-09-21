@@ -5,7 +5,7 @@ const supertest = require('supertest');
 var server = supertest.agent("http://localhost:8081"); //the server must already be running for the tests to work!
 
 describe('GET /', function() {
-    it('responds with 302 to forms/create-form-layout', function(done) {
+    it('responds with 302 to create-map', function(done) {
         server
         .get("/")
         .expect(302)
@@ -44,9 +44,36 @@ describe('GET /splash', function() {
 });
 
 describe('GET /*', function() {
-    it('responds with 302 to notfound', function(done) {
+    it('responds with 200 to notfound', function(done) {
         server
-        .get("/")
+        .get("/*")
+        .expect(200)
+        .end(function(err, res) {
+            expect(res.status).to.equal(200);
+            expect(res.error).to.be.false;
+            done();
+        });
+    });
+});
+
+describe('GET itinerary-form', function() {
+    it('responds with 200 to create-form', function(done) {
+        server
+        .get("/trips/create/details")
+        .expect(302)
+        .end(function(err, res) {
+            expect(res.status).to.equal(302);
+            expect(res.error).to.be.false;
+            done();
+        });
+    });
+});
+
+describe('POST /trips', function() {
+    it('responds with 302 itinerary-form', function(done) {
+        server
+        .post("/trips")
+        .send({markers : "test"})
         .expect(302)
         .end(function(err, res) {
             expect(res.status).to.equal(302);
