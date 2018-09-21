@@ -1,0 +1,16 @@
+html,
+body,
+header,
+#bg {
+    height: 100%;
+}
+#bg {
+  z-index: 1;
+  height: 100%;
+  background: url("../pics/wallpaper.png")no-repeat center center fixed;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  position: relative;
+}

@@ -77,6 +77,10 @@ app.get('/form', function(req, res) {
   }
 })
 
+app.get('/splash', function(req, res) {
+  res.render('splash');
+})
+
 app.post('/uploadLocations', function(req, res, next) {
   //console.log(req.body.location_data[0][0]); - for reference
   req.session.data = req.body;
