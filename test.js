@@ -4,6 +4,7 @@ const sinon = require("sinon");
 const supertest = require('supertest');
 var server = supertest.agent("http://localhost:8081"); //the server must already be running for the tests to work!
 
+process.env['test'] = true;
 describe('GET /', function() {
     it('responds with 302 to create-map', function(done) {
         server
