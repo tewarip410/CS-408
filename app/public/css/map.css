@@ -5,7 +5,7 @@
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
-        height: 96%;
+        height: 95.5%;
         margin: 0;
         padding: 0;
       }
@@ -38,6 +38,17 @@
 
       #map #infowindow-content {
         display: inline;
+      }
+
+      .controls {
+        margin-top: 16px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       }
 
       .pac-card {

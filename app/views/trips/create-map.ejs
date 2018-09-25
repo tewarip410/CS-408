@@ -21,7 +21,8 @@
           center: {lat: 39.768403, lng: -86.15806800000001},
           zoom: 5,
           mapTypeId: 'roadmap',
-          disableDefaultUI: true
+          disableDefaultUI: true,
+          zoomControl: true,
         });
 
         // Create the search box and link it to the UI element.
@@ -72,7 +73,11 @@
                     map: map,
                     title: results[0].formatted_address
                   });
+                  var index = markers.length;
                   markers.push(marker);
+                  marker.addListener('click', function(event) {
+                    delMarker(index);
+                  });
                 }
               }
             });
@@ -106,7 +111,11 @@
                   map: map,
                   title: results[0].formatted_address
                 });
+                var index = markers.length;
                 markers.push(marker);
+                marker.addListener('click', function(event) {
+                  delMarker(index);
+                });
                 infowindow.setContent(results[0].formatted_address);
                 infowindow.open(map, marker);
               } else {
