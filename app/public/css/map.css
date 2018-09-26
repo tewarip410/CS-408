@@ -5,21 +5,24 @@
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
-        height: 95.5%;
+        height: 90%;
         margin: 0;
         padding: 0;
       }
-      #floating-panel {
-        position: absolute;
-        left: 45%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
+
+      .my-primary {
+        background-color: #26225b;
+        color: white;
+      }
+
+      .my-outline-primary {
+        border-color: #cc9f2b;
+        color: #26225b;
+        background-color: white;
+      }
+      .my-outline-primary:hover{
+        background-color: #cc9f2b;
+        color: white;
       }
 
       #description {
