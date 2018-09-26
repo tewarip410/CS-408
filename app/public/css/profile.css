@@ -1,0 +1,25 @@
+/* USER PROFILE PAGE */
+html,
+body {
+
+  height: 100%;
+}
+.top-left {
+  position: absolute;
+  top: 10%;
+  left:50%;
+  transform: translateX(-50%);
+}
+.my-btn-group {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+.box_buttons {
+  background-color: lightseagreen;
+  /* border: 2px solid darkblue; */
+}
+.box_buttons:hover {
+  background-color: lightslategray;
+  cursor:pointer;
+}
