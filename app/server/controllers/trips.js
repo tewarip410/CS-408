@@ -55,7 +55,9 @@ module.exports = {
     try {
       data = await Promise.all(promises);
     } catch (e) {
-      return console.log(e);
+      console.log(e);
+      req.flash('error', 'Something went wrong in planning your vacation. There is most likely not a flight in one of the locations you selected.');
+      return res.redirect('/');
     }
 
     console.log(`finished api requests in ${(new Date() - start_time) / 1000} seconds.`);
@@ -130,7 +132,11 @@ module.exports = {
     var hotels = [];
     var hotel_prices = [];
 
-    data = await Promise.all(trip_promises);
+    try {
+      data = await Promise.all(trip_promises);
+    } catch (e) {
+      console.log(e);
+    }
           
     for (var j = 0; j < data.length; j++) {
       var flight = data[j].results[0].itineraries[0].outbound.flights;
@@ -148,7 +154,11 @@ module.exports = {
       }
     }
 
-    data = await Promise.all(hotel_promises);
+    try {
+      data = await Promise.all(hotel_promises);
+    } catch (e) {
+      console.log(e);
+    }
     console.log(itinerary);
     console.log('------')
     console.log(flight_prices);
@@ -184,8 +194,12 @@ function call_api(api_call, return_info) {
       if (error) {
         return reject(error);
       }
-
+      console.log(body);
+      console.log(return_info);
       var json = JSON.parse(body);
+      if (!json.length) {
+        return reject('Nothing found!');   
+      }
       if (return_info === 1) { //return airport code
         return resolve(json[0].airport);
       }

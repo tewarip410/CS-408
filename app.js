@@ -6,8 +6,7 @@ const passport = require('passport');
 const moment = require('moment');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
-// const flash = require('express-flash');
-// const reqFlash = require('req-flash');
+const flash = require('express-flash');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 
@@ -21,6 +20,7 @@ const db = mongoose.connection;
 // bind mongo error
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+app.use(flash());
 app.use(methodOverride('_method'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,7 +42,7 @@ app.use('/public', express.static(path.join(__dirname, '/app/public')));
 app.use('/views/includes', express.static(path.join(__dirname, 'includes')));
 require('./app/server/config/passport.js')(passport);
 
-const authRouter = require('./app/server/routes/auth.js');
+const authRouter = require('./app/server/routes/auth');
 const mainRouter = require('./app/server/routes/main');
 const tripRouter = require('./app/server/routes/trips');
 const profileRouter = require('./app/server/routes/profiles');
