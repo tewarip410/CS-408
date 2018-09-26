@@ -41,38 +41,44 @@ module.exports = {
     const {location_data} = req.session.data;
     let date = (req.body.date).split('/');
     date = date[2] + '-' + date[0] + '-' + date[1];
-    console.log('\nBeginning itinerary requests...');
-    console.log(`start date: ${date}`);
+    console.log('\nbeginning itinerary requests...');
+    console.log(`\tstart date: ${date}`);
     let queryStart = new Date();
     const apCodes = await getAirportCodes(duration.length, location_data);
     if (!apCodes) {
       req.flash('error', 'Sorry, we were unable to find an airport near one of your locations.');
       return res.redirect('/');
     }
-    console.log(`finished airport code request in ${(new Date() - queryStart) / 1000} seconds.`);
+    console.log(`\tfinished airport code request in ${(new Date() - queryStart) / 1000} seconds.`);
 
     const trip_data = await makeTripData(req, apCodes, location_data, date);
-
     // console.log(trip_data);
-      
-    const flights = await getFlights(trip_data, efficiency);
+    
+    queryStart = new Date();
+    const [flights, hotels] = await Promise.all([
+      getFlights(trip_data, efficiency),
+      getHotels(trip_data)
+    ]);
+    console.log(`\tfinished flight and hotel query in ${(new Date() - queryStart) / 1000} seconds.`);
+
     if (!flights) {
+      console.log('error finding flights.')
       req.flash('error', 'Sorry, something went wrong while attempting to find flights.');
       return res.redirect('/');
     }
 
-    const hotels = await getHotels(trip_data);
     if (!hotels) {
+      console.log('error finding hotels.')
       req.flash('error', 'Sorry, something went wrong while attempting to find hotels.');
       return res.redirect('/');
     }
 
+    console.log(hotels);
     const flight_itinerary = [];
     const flight_prices = [];
     const hotel_itinerary = [];
     const hotel_prices = [];
 
-    console.log(flights);
     for (var j = 0; j < flights.length; j++) {
       var flight = flights[j].results[0].itineraries[0].outbound.flights;
       flight_prices.push(flights[j].results[0].fare.total_price);
@@ -90,7 +96,7 @@ module.exports = {
     }
 
     //console.log(flight_itinerary);
-    console.log('------')
+    // console.log('------')
     //console.log(flight_prices);
     for (var i = 0; i < hotels.length; i++) {
       var result = hotels[i].results[0];
@@ -100,9 +106,9 @@ module.exports = {
       hotel_itinerary.push({name, addr});
     }
 
-    console.log('-----');
+    //console.log('-----');
     //console.log(hotels);
-    console.log('-----');
+    //console.log('-----');
     //console.log(hotel_prices);
     res.render('forms/create-form-layout',
       {
@@ -238,13 +244,12 @@ async function getHotels(trip_data) {
   const hotel_promises = [];
   for (var i = 0; i < trip_data.length; i++) {
     if (i > 0) {
-      var location = trip_data[i].apCode;
       var check_in = trip_data[i].start_date;
       var check_out = trip_data[i].end_date;
 
       if (check_in != check_out) {
-        api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-airport?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
-        api_call = api_call + "&location=" + location + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD";
+        api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
+        api_call = api_call + "&latitude=" + trip_data[i].lat + "&longitude=" + trip_data[i].lng + "&radius=50" + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD";
         hotel_promises.push(call_api(api_call, 3));
       }
     }
