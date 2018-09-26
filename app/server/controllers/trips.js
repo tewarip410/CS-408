@@ -47,7 +47,7 @@ module.exports = {
     const apCodes = await getAirportCodes(duration.length, location_data);
     if (!apCodes) {
       req.flash('error', 'Sorry, we were unable to find an airport near one of your locations.');
-      return res.redirect('/');
+      return res.redirect('/trips/create/details');
     }
     console.log(`\tfinished airport code request in ${(new Date() - queryStart) / 1000} seconds.`);
 
@@ -64,13 +64,13 @@ module.exports = {
     if (!flights) {
       console.log('error finding flights.')
       req.flash('error', 'Sorry, something went wrong while attempting to find flights.');
-      return res.redirect('/');
+      return res.redirect('/trips/create/details');
     }
 
     if (!hotels) {
       console.log('error finding hotels.')
       req.flash('error', 'Sorry, something went wrong while attempting to find hotels.');
-      return res.redirect('/');
+      return res.redirect('/trips/create/details');
     }
 
     console.log(hotels);
