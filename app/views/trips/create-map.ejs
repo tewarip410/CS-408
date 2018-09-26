@@ -1,11 +1,12 @@
-    <div id="floating-panel">
-      <input id="latlng" type="text">
-      <input id="submit" type="button" value="Enter Coordinates">
-      <input onclick="deleteMarkers();" type=button value="Delete Markers">
-      <input onclick="submitMarkers();" type=button value="Finish">
-    </div>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
+    </br>
+    <div>
+        <input id="latlng" type="text">
+        <input id="submit" type="button" class="btn my-outline-primary" value="Enter Coordinates">
+        <input onclick="deleteMarkers();" type=button class="btn my-outline-primary" value="Delete Markers">
+        <input onclick="submitMarkers();" type=button class="btn my-primary" value="Finish">
+    </div>
     <script>
       // In the following example, markers appear when the user clicks on the map.
       // The markers are stored in an array.
@@ -20,7 +21,9 @@
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 39.768403, lng: -86.15806800000001},
           zoom: 5,
-          mapTypeId: 'roadmap'
+          mapTypeId: 'roadmap',
+          disableDefaultUI: true,
+          zoomControl: true,
         });
 
         // Create the search box and link it to the UI element.
@@ -71,7 +74,11 @@
                     map: map,
                     title: results[0].formatted_address
                   });
+                  var index = markers.length;
                   markers.push(marker);
+                  marker.addListener('click', function(event) {
+                    delMarker(index);
+                  });
                 }
               }
             });
@@ -105,7 +112,11 @@
                   map: map,
                   title: results[0].formatted_address
                 });
+                var index = markers.length;
                 markers.push(marker);
+                marker.addListener('click', function(event) {
+                  delMarker(index);
+                });
                 infowindow.setContent(results[0].formatted_address);
                 infowindow.open(map, marker);
               } else {
@@ -193,11 +204,6 @@
         }
       }
 
-      $('#datepicker').datepicker({
-        autoclose: true,
-        todayHighlight: true,
-      });
-      $('#datepicker').datepicker("setDate", new Date());
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSLS-ZfjeiocBavx558otEEutNVgrwF4Y&libraries=places&callback=initAutocomplete"
     async defer></script>
