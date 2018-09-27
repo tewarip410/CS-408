@@ -140,10 +140,9 @@
                 map: map,
                 title: results[0].formatted_address
               });
-              var index = markers.length;
               markers.push(marker);
               marker.addListener('click', function(event) {
-                delMarker(index);
+                delMarker(marker.position.lat(), marker.position.lng());
               });
             }
           }
@@ -151,10 +150,13 @@
         
       }
 
-      var delMarker = function (id) {
-        marker = markers[id];
-        marker.setMap(null);
-        markers[id] = null;
+      var delMarker = function (lat, lng) {
+        for (var i = 0; i < markers.length; i++) {
+          if (markers[i].position.lat() === lat && markers[i].position.lng() === lng) {
+            markers[i].setMap(null);
+            markers.splice(i, 1);
+          }
+        }
       }
 
       // Sets the map on all markers in the array.
