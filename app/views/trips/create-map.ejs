@@ -74,10 +74,13 @@
                     map: map,
                     title: results[0].formatted_address
                   });
-                  var index = markers.length;
+                  var infowindow = new google.maps.InfoWindow({
+                    content: results[0].formatted_address
+                  });
+                  infowindow.open(map, marker);
                   markers.push(marker);
                   marker.addListener('click', function(event) {
-                    delMarker(index);
+                    delMarker(marker.position.lat(), marker.position.lng());
                   });
                 }
               }
@@ -112,13 +115,14 @@
                   map: map,
                   title: results[0].formatted_address
                 });
-                var index = markers.length;
+                var infowindow = new google.maps.InfoWindow({
+                    content: results[0].formatted_address
+                });
+                infowindow.open(map, marker);
                 markers.push(marker);
                 marker.addListener('click', function(event) {
-                  delMarker(index);
+                  delMarker(marker.position.lat(), marker.position.lng());
                 });
-                infowindow.setContent(results[0].formatted_address);
-                infowindow.open(map, marker);
               } else {
                 window.alert('No results found');
               }
@@ -140,6 +144,10 @@
                 map: map,
                 title: results[0].formatted_address
               });
+              var infowindow = new google.maps.InfoWindow({
+                  content: results[0].formatted_address
+              });
+              infowindow.open(map, marker);
               markers.push(marker);
               marker.addListener('click', function(event) {
                 delMarker(marker.position.lat(), marker.position.lng());
