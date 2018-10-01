@@ -1,5 +1,6 @@
 const request = require('request');
 const moment = require('moment');
+const Trip = require('../models/trip');
 
 module.exports = {
   //
@@ -34,8 +35,62 @@ module.exports = {
     res.render('trips/create-map');
   },
   detailsPost: async (req, res) => {
+    // TODO save our trip info
+    const {name} = req.body;
+    const {date} = req.body;
+    const {roundTrip} = req.body;
+    const {optradio} = req.body;
+    const {duration} = req.body;
+    const {order} = req.body;
+    const {location_data} = req.session.data;
+    const {user} = req;
+    const nLocations = order.length;
+    const locations = [];
+    const transportation = [];
+    console.log(location_data);
+    for (var i = 0; i < nLocations; i++) {
+      transportation.push(
+        req.body[`transportation_${i}`]
+      );
+    }
+    for (var i = 0; i < nLocations; i++) {
+      // if (removed[i]) { continue; }
+      // TODO use order to sort first
+      locations.push({
+        name: location_data[i][0],
+        x: location_data[i][2],
+        y: location_data[i][1],
+        duration: duration[i],
+        transportation: transportation[i]
+      });
+    }
+
+    let trip;
+    try {
+      trip = await Trip.create({
+        name,
+        start_date: date,
+        _userId: user._id,
+        locations
+      });
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Sorry, something went wrong while attempting to create your trip.');
+      return res.redirect('/trips/create/details');
+    }
+
+    if (trip) {
+      res.redirect(`/trips/${trip._id}`);
+    }
+
+
+    // TODO render itinerary.ejs
+    // TODO itinerary.ejs makes ajax calls to get info about the trip (on page load)
+    // TODO server processes requests and sends back html
+    // TODO front end replaces spinner with html
+    // TODO remove below
     //TODO - add checks for valid date and valid order (ie. an invalid order would be 1,5 - should be 1,2)
-    const round_trip = req.body.rt;
+    /*const round_trip = req.body.rt;
     const efficiency = req.body.optradio;
     const {duration} = req.body;
     const {location_data} = req.session.data;
@@ -119,7 +174,25 @@ module.exports = {
         hotels: hotel_itinerary,
         hotel_prices,
         user: req.user
-      });
+      });*/
+  },
+  tripGet: async (req, res) => {
+    const {tripId} = req.params;
+    if (!tripId) {
+      req.flash('error', 'Invalid trip ID.');
+      return res.redirect('/');
+    }
+    
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Error finding trip by tripId.');
+      return res.redirect('/');
+    }
+
+    res.send(trip);
   }
 }
 
