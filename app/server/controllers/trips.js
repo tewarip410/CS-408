@@ -28,6 +28,16 @@ module.exports = {
         user: req.user
       });
   },
+
+  createTouristGet: async(req, res) => {
+    res.render('forms/create-form-layout',
+      {
+        page: 'tourist-map.ejs',
+        stylesheet: 'map.css',
+        title: 'Tourist Attractions • Adventum',
+        user: req.user
+      });
+  },
   //
   // POST /
   tripsPost: async (req, res) => {
