@@ -71,7 +71,9 @@ module.exports = {
         name,
         start_date: date,
         _userId: user._id,
-        locations
+        locations,
+        optradio,
+        roundTrip
       });
     } catch (e) {
       console.log(e);
@@ -219,8 +221,12 @@ module.exports = {
 
     if (Number(index) === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
 
-
-    res.json({ response: 'works'});
+    const apCodes = await getAirportCodes(trip.locations.length, trip.locations);
+    const trip_data = await makeTripData(apCodes, trip);
+    console.log(trip_data);
+    //const flight_data = await getFlights(trip_data, trip.optradio);
+    //const hotel_data = await getHotels(trip_data);
+    //res.json({ response: 'works'});
   }
 }
 
@@ -252,8 +258,8 @@ function call_api(api_call, return_info) {
 async function getAirportCodes(length, locationData) {
   const promises = [];
   for (var i = 0; i < length; i++) {
-    const lat = locationData[i][1];
-    const lng = locationData[i][2];
+    const lat = locationData[i].y;
+    const lng = locationData[i].x;
     const api_call = "https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
     const get_airport_code = api_call + "&latitude=" + lat + "&longitude=" + lng;
     promises.push(call_api(get_airport_code, 1));
@@ -267,19 +273,20 @@ async function getAirportCodes(length, locationData) {
   }
 }
 
-async function makeTripData(req, apCodes, locationData, tripDate) {
+async function makeTripData(apCodes, trip) {
+  console.log(trip);
   let data = [];
   const nLocs = apCodes.length;
-  let date = tripDate;
+  let date = trip.start_date;
   for (var i = 0; i < nLocs; i++) {
     const radio = "exampleRadios " + i;
-    const name = locationData[i][0];
-    const lat = locationData[i][1];
-    const lng = locationData[i][2];
+    const name = trip.locations[i].name;
+    const lat = trip.locations[i].y;
+    const lng = trip.locations[i].x;
     const td = {
-      duration: req.body.duration[i],
-      order: req.body.order[i],
-      transportation: req.body[radio],
+      duration: trip.locations[i].duration,
+      order: i,
+      transportation: trip.locations[i].transportation,
       name,
       lat,
       lng,
@@ -295,12 +302,13 @@ async function makeTripData(req, apCodes, locationData, tripDate) {
   for (var i = 0; i < nLocs; i++) {
     var start_date;
     if (i === 0) {
-      data[i].start_date = date;
-      data[i].end_date = date;
+      data[i].start_date = moment(date).format("YYYY-MM-DD") + '';
+      data[i].end_date = moment(date).format("YYYY-MM-DD") + '';
     }
     else {
-      start_date = date;
-      var date_split = date.split('-');
+      start_date = moment(date).format("YYYY-MM-DD") + '';
+      console.log(start_date);
+      var date_split = start_date.split('-');
       date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(data[i].duration), 'days');
       date = moment(date).format("YYYY-MM-DD");
       data[i].start_date = start_date;
