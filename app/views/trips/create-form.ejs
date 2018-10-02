@@ -1,6 +1,9 @@
 <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/js/gijgo.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" type="text/javascript"></script>
 <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" 
+integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
   <div class="card w-75 p-3" style="width: 21.5em; margin:0 auto;">
     <% if (locals.data) { %>
         <form onsubmit="return checker();" method="post" id="travel_form" style="text-align: center">
@@ -48,7 +51,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4" checked>
                                 <label class="form-check-label">
-                                    None
+                                    Other
                                 </label>
                             </div>
                 </span>
@@ -68,16 +71,17 @@
 
             <div class="form-check form-check-inline" >
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cost Efficient
+                    <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cheapest
                 </label>
             </div>
             <div class="form-check form-check-inline pb-4">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Time Efficient
+                    <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Fastest
                 </label>
             </div>
             <br>
  
+            <a href="/trips/create" class="fas fa-arrow-left fa-2x"></a>
             <button type="submit" class="btn btn-primary">Plan my vacation!</button>
             <a href="http://localhost:8081/" id="cancel" name="cancel" class="btn btn-primary">Cancel<a>
         
