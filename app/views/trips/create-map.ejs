@@ -1,11 +1,12 @@
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <div id="map"></div>
-    </br>
-    <div>
+    <div class="outer-map">
+      <div id="map"></div>
+      <div class="btn-container">
         <input id="latlng" type="text">
         <input id="submit" type="button" class="btn my-outline-primary" value="Enter Coordinates">
         <input onclick="deleteMarkers();" type=button class="btn my-outline-primary" value="Delete Markers">
         <input onclick="submitMarkers();" type=button class="btn my-primary" value="Finish">
+      </div>
     </div>
     <script>
       // In the following example, markers appear when the user clicks on the map.
