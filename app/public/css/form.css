@@ -1,0 +1,22 @@
+
+.dragOver {
+    border-top: 20px solid rgb(255, 255, 229) !important;
+    border-bottom: 20px solid rgb(255, 255, 229) !important;
+    background-color: rgba(0,0,0,.05);
+}
+.drag-item {
+    font-family: Helvetica;
+    margin: 10px 10px 0 10px;
+    padding: 10px;
+    transition: box-shadow .1s ease-in-out;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,.03);
+    border-radius: 3px;
+    background-color: #ecf0f1;
+}
+.slide-placeholder {
+    position: relative;
+}
+.ui-sortable-helper {
+    box-shadow: 0 3px 10px rgba(0,0,0,.1), 0 10px 30px rgba(0,0,0,.05);
+}
