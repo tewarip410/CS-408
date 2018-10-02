@@ -1,14 +1,22 @@
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- Causes issues with datepicker looking bad-->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- Causes issues with datepicker looking bad-->
 <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/js/gijgo.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" type="text/javascript"></script>
 <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous">
+
 <link href="../../public/css/form.css" rel="stylesheet" type="text/css" />
-  <div class="card w-75 p-3" style="width: 21.5em; margin:0 auto;">
+<br>
+<div class="card w-75 p-3 " style="width: 21.5em; margin:0 auto;">
     <% if (locals.data) { %>
-        <form onsubmit="return checker();" method="post" id="travel_form" style="text-align: center">
-            <br>
+    <form onsubmit="return checker();" method="post" id="travel_form" style="text-align: center">
+        <br>
+        <div class="card">
             <span class="form-inline">
-              <div class="mx-auto form-inline"><input class="form-control text-center" name="name" type="text" id="title" placeholder="Enter the name of your trip" style="width: 30rem; height: 2.5rem ;"></div>
+              <div class="mx-auto form-inline pt-4">
+                <input class="form-control text-center" type="text" id="title" placeholder="Enter the name of your trip" style="width: 30rem; height: 2.5rem ;">
+              </div>
             </span>
             <span class="form-inline">
                 <div class="mx-auto form-inline"><label class="pr-3" for="datepicker" >Start date</label>
@@ -63,142 +71,151 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="roundTrip" id="gridCheck">
                     <label class="form-check-label">
-                    Round Trip?
+                        Round Trip?
                     </label>
                 </div>
             </div>
 
-            <div class="form-check form-check-inline" >
-                <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cost Efficient
-                </label>
-            </div>
-            <div class="form-check form-check-inline pb-4">
-                <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Time Efficient
-                </label>
-            </div>
-            <br>
- 
-            <button type="submit" class="btn btn-primary">Plan my vacation!</button>
-            <a href="http://localhost:8081/" id="cancel" name="cancel" class="btn btn-primary">Cancel</a>
+            <span>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cheapest
+                    </label>
+                </div>
+                <div class="form-check form-check-inline pb-4">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Fastest
+                    </label>
+                </div>
+            </span>
+        </div>
+        <br>
+        <span class="form-inline ">
+                <a href="/trips/create" class="fas fa-arrow-left fa-2x"></a>
+            <div class="mx-auto form-inline">
         
-        </form>
+        <button type="submit" class="btn btn-primary">Plan my vacation!</button>
+        <a href="http://localhost:8081/" id="cancel" name="cancel" class="btn btn-primary">Cancel</a>
+        </div>
+        </span>
+
+    </form>
     <% } %>
 </div>
 
-    <script>
-        $(".drag-list").sortable({
-            axis: 'y',
-            placeholder: 'slide-placeholder',
-            revert: 150,
-            start: function (e, ui) {
+<script>
+    $(".drag-list").sortable({
+        axis: 'y',
+        placeholder: 'slide-placeholder',
+        revert: 150,
+        start: function (e, ui) {
+            var placeholderHeight = ui.item.outerHeight();
+            ui.placeholder.height(placeholderHeight);
+            ui.placeholder.css({
+                'margin-top': ui.item.css('margin-top'),
+                'margin-right': ui.item.css('margin-right'),
+                'margin-bottom': ui.item.css('margin-bottom'),
+                'margin-left': ui.item.css('margin-left')
+            });
+            $('<div class="slide-placeholder-animator" data-height="' + placeholderHeight + '"></div>').insertAfter(ui.placeholder);
+        },
+        change: function (event, ui) {
+            ui.placeholder.stop().height(0).animate({
+                height: ui.item.outerHeight(),
+                marginTop: parseInt(ui.item.css('margin-top')),
+                marginRight: parseInt(ui.item.css('margin-right')),
+                marginBottom: parseInt(ui.item.css('margin-bottom')),
+                marginLeft: parseInt(ui.item.css('margin-left'))
+            }, 150);
+            placeholderAnimatorHeight = parseInt($(".slide-placeholder-animator").attr("data-height"));
+
+            $(".slide-placeholder-animator").stop().height(placeholderAnimatorHeight).animate({
+                height: 0,
+                marginTop: 0,
+                marginRight: 0,
+                marginBottom: 0,
+                marginLeft: 0
+            }, 150, function () {
+                $(this).remove();
                 var placeholderHeight = ui.item.outerHeight();
-                ui.placeholder.height(placeholderHeight);
-                ui.placeholder.css({
-                    'margin-top': ui.item.css('margin-top'),
-                    'margin-right': ui.item.css('margin-right'),
-                    'margin-bottom': ui.item.css('margin-bottom'),
-                    'margin-left': ui.item.css('margin-left')
-                });
                 $('<div class="slide-placeholder-animator" data-height="' + placeholderHeight + '"></div>').insertAfter(ui.placeholder);
-            },
-            change: function (event, ui) {
-                ui.placeholder.stop().height(0).animate({
-                    height: ui.item.outerHeight(),
-                    marginTop: parseInt(ui.item.css('margin-top')),
-                    marginRight: parseInt(ui.item.css('margin-right')),
-                    marginBottom: parseInt(ui.item.css('margin-bottom')),
-                    marginLeft: parseInt(ui.item.css('margin-left'))
-                }, 150);
-                placeholderAnimatorHeight = parseInt($(".slide-placeholder-animator").attr("data-height"));
+            });
+        },
+        stop: function (e, ui) {
+            console.log($(".drag-list drag-item").first().text());
+            $(".slide-placeholder-animator").remove();
+        },
+    });
+</script>
 
-                $(".slide-placeholder-animator").stop().height(placeholderAnimatorHeight).animate({
-                    height: 0,
-                    marginTop: 0,
-                    marginRight: 0,
-                    marginBottom: 0,
-                    marginLeft: 0
-                }, 150, function () {
-                    $(this).remove();
-                    var placeholderHeight = ui.item.outerHeight();
-                    $('<div class="slide-placeholder-animator" data-height="' + placeholderHeight + '"></div>').insertAfter(ui.placeholder);
-                });
-            },
-            stop: function (e, ui) {
-                console.log($(".drag-list drag-item").first().text());
-                $(".slide-placeholder-animator").remove();
-            },
-        });
-    </script>
-    
-    <script>
-        $('#datepicker').datepicker({
-            uiLibrary: 'fontawesome'
-        });
+<script>
+    $('#datepicker').datepicker({
+        uiLibrary: 'fontawesome'
+    });
 
-        function checker() {
-            var x = true;
-            var checked = true;
-            if (x = document.getElementsByClassName("form-check-input")) {
-                console.log("radio button checked")
-            }
-            var dateInput = document.getElementById("datepicker");
-            var durationInput = document.getElementsByName("duration");
-            var orderInput = document.getElementsByName("order");
-            var titleInput = document.getElementById("title");
-            var optionInput1 = document.getElementById("1");
-            var optionInput2 = document.getElementById("2");
+    function checker() {
+        var x = true;
+        var checked = true;
+        if (x = document.getElementsByClassName("form-check-input")) {
+            console.log("radio button checked")
+        }
+        var dateInput = document.getElementById("datepicker");
+        var durationInput = document.getElementsByName("duration");
+       // var orderInput = document.getElementsByName("order");
+        var titleInput = document.getElementById("title");
+        var optionInput1 = document.getElementById("1");
+        var optionInput2 = document.getElementById("2");
 
-            // console.log(orderInput);
-            //     console.log(orderInput.value);
-            if ((dateInput && dateInput.value)) {
-                console.log("date checked")
-            }
-            else {
-                checked = false;
-            }
-            if (durationInput) {
-                for (var i = 0; i < durationInput.length; i++) {
-                    if (!durationInput[i].value || isNaN(durationInput[i].value || durationInput[i].value < 0)) {
-                        checked = false;
-                    }
+        // console.log(orderInput);
+        //     console.log(orderInput.value);
+        if ((dateInput && dateInput.value)) {
+            console.log("date checked")
+        }
+        else {
+            checked = false;
+        }
+        if (durationInput) {
+            for (var i = 0; i < durationInput.length; i++) {
+                if (!durationInput[i].value || isNaN(durationInput[i].value || durationInput[i].value < 0)) {
+                    checked = false;
                 }
-                console.log("duration checked")
             }
-            else {
-                checked = false;
-            }
-
-            if (orderInput) {
-                console.log(orderInput);
-                for (var i = 0; i < orderInput.length; i++) {
-                    if (!orderInput[i].value || isNaN(orderInput[i].value) || orderInput[i].value < 0) {
-                        checked = false;
-                    }
-                }
-                console.log("order checked")
-            }
-            else {
-                checked = false;
-            }
-
-            if (titleInput && titleInput.value) {
-                console.log("title checked")
-            }
-            else {
-                checked = false;
-            }
-
-            if (!optionInput1.checked && !optionInput2.checked) {
-                checked = false;
-            }
-
-            if (checked == false) {
-                alert("Form is not completed. Please go back and check.");
-            }
-            return checked;
+            console.log("duration checked")
+        }
+        else {
+            checked = false;
         }
 
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        // if (orderInput) {
+        //     console.log(orderInput);
+        //     for (var i = 0; i < orderInput.length; i++) {
+        //         if (!orderInput[i].value || isNaN(orderInput[i].value) || orderInput[i].value < 0) {
+        //             checked = false;
+        //         }
+        //     }
+        //     console.log("order checked")
+        // }
+        // else {
+        //     checked = false;
+        // }
+
+        if (titleInput && titleInput.value) {
+            console.log("title checked")
+        }
+        else {
+            checked = false;
+        }
+
+        if (!optionInput1.checked && !optionInput2.checked) {
+            checked = false;
+        }
+
+        if (checked == false) {
+            alert("Form is not completed. Please go back and check.");
+        }
+        return checked;
+    }
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>

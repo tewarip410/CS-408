@@ -13,6 +13,7 @@
     border: 1px solid rgba(0,0,0,.03);
     border-radius: 3px;
     background-color: #ecf0f1;
+    cursor: all-scroll;
 }
 .slide-placeholder {
     position: relative;
