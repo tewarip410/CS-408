@@ -3,12 +3,16 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <link href="../../public/css/tourist-map.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
     <script>
       function initAutocomplete() {
+        var geocoder = new google.maps.Geocoder;
+        var infowindow = new google.maps.InfoWindow;
+
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 39.768403, lng: -86.15806800000001},
           zoom: 5,
@@ -50,21 +54,26 @@
               console.log("Returned place contains no geometry");
               return;
             }
-            var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
 
-            // Create a marker for each place.
-            markers.push(new google.maps.Marker({
-              map: map,
-              icon: icon,
-              title: place.name,
-              position: place.geometry.location
-            }));
+            var latlng = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()};
+            geocoder.geocode({'location': latlng}, function(results, status) {
+              if (status === 'OK') {
+                if (results[0]) {
+                  var marker = new google.maps.Marker({
+                    map: map,
+                    title: place.name,
+                    position: place.geometry.location
+                  });
+                  var infowindow = new google.maps.InfoWindow({
+                    content: place.name + '<br>' + results[0].formatted_address
+                  });
+                  markers.push(marker);
+                  marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                  });
+                }
+              }
+            });
 
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
@@ -79,6 +88,7 @@
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSLS-ZfjeiocBavx558otEEutNVgrwF4Y&libraries=places&callback=initAutocomplete"
-         async defer></script>
+    async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   </body>
 </html>
