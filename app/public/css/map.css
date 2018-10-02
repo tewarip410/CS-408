@@ -5,7 +5,7 @@
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
-        height: 90%;
+        height: 100%;
         margin: 0;
         padding: 0;
       }
@@ -105,4 +105,17 @@
       }
       #target {
         width: 345px;
+      }
+
+      .outer-map {
+        height: calc(100vh - 64px);
+        position: relative;
+      }
+
+      .btn-container {
+        position: absolute;
+        right: 3rem;
+        top: 2rem;
+        display: flex;
+        flex-direction: column;
       }
