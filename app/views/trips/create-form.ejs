@@ -14,62 +14,20 @@
         <br>
         <div class="card">
             <span class="form-inline">
-              <div class="mx-auto form-inline pt-4">
-                <input class="form-control text-center" type="text" id="title" placeholder="Enter the name of your trip" style="width: 30rem; height: 2.5rem ;">
-              </div>
-            </span>
-            <span class="form-inline">
-                <div class="mx-auto form-inline"><label class="pr-3" for="datepicker" >Start date</label>
-                <input name="date" id="datepicker" width="276" /></div>
+                <div class="mx-auto form-inline pt-4"><input class="form-control text-center" type="text" id="title"
+                        placeholder="Enter the name of your trip" style="width: 30rem; height: 2.5rem ;"></div>
             </span>
             <br>
-            <div class="drag-list">
-            <% var i = 0; %>
-            <% data.location_data.forEach((obj) => { %>
-                <div class="drag-item">
-                <div class="form-group">
-                  <label class="h5"><%- obj[0] %></label>
-                  <span class="form-inline">
-                    <div class="mx-auto form-inline">
-                      <input type="text" placeholder="Nights here" class="form-control mr-3 text-center" name="duration" id="<%- obj[0] %>-stay" required>
-                      <input type="text" placeholder="Order" class="form-control text-center" name="order" id="<%- obj[0] %>-order" required>
-                    </div>
-                  </span>
-                </div>
-                <span class="form-check form-check-inline pb-4">
-                        <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transportation_<%= i %>" value="plane" id="<%- obj[0] %>-r1">
-                                <label class="form-check-label">
-                                    Plane
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transportation_<%= i %>" value="train" id="<%- obj[0] %>-r2">
-                                <label class="form-check-label">
-                                    Train
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transportation_<%= i %>" value="car" id="<%- obj[0] %>-r3">
-                                <label class="form-check-label">
-                                    Car
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transportation_<%= i %>" value="none" id="<%- obj[0] %>-r4" checked>
-                                <label class="form-check-label">
-                                    None
-                                </label>
-                            </div>
-                </span>
-                </div>
-                <% i++; %>
-            <% }) %>
-            </div>
+            <span class="form-inline">
+                <br>
+                <div class="mx-auto form-inline"><label class="pr-3" for="datepicker">Start date</label>
+                    <input name="date" id="datepicker" width="276" /></div>
 
+            </span>
+            <br>
             <div class="form-group">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="roundTrip" id="gridCheck">
+                    <input class="form-check-input" type="checkbox" name="rt" id="gridCheck">
                     <label class="form-check-label">
                         Round Trip?
                     </label>
@@ -89,7 +47,57 @@
                 </div>
             </span>
         </div>
+
         <br>
+        <div class="drag-list">
+            <% var i = 0; %>
+            <% data.location_data.forEach((obj) => { %>
+            <div class="drag-item">
+                <div class="form-group pt-2">
+                    <label class="h5">
+                        <%- obj[0] %></label>
+                    <span class="form-inline">
+                        <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
+                                name="duration" id="<%- obj[0] %>-stay">
+                                </div>
+                    </span>
+                </div>
+
+                <span class="form-check form-check-inline pb-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
+                        <label class="form-check-label">
+                            Plane
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
+                        <label class="form-check-label">
+                            Train
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
+                        <label class="form-check-label">
+                            Car
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4"
+                            checked>
+                        <label class="form-check-label">
+                            Other
+                        </label>
+                    </div>
+                </span>
+            </div>
+            <% i++; %>
+            <% }) %>
+        </div>
+
+
+        <br>
+        
         <span class="form-inline ">
                 <a href="/trips/create" class="fas fa-arrow-left fa-2x"></a>
             <div class="mx-auto form-inline">
