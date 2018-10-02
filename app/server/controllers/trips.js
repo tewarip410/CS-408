@@ -35,7 +35,7 @@ module.exports = {
     res.render('trips/create-map');
   },
   detailsPost: async (req, res) => {
-    // TODO save our trip info
+    // save trip info
     const {name} = req.body;
     const {date} = req.body;
     const {roundTrip} = req.body;
@@ -192,7 +192,35 @@ module.exports = {
       return res.redirect('/');
     }
 
-    res.send(trip);
+    res.render('forms/create-form-layout',
+      {
+        page: 'itinerary.ejs',
+        title: `${trip.name} Itinerary • Adventum`,
+        user: req.user,
+        trip
+      });
+  },
+  transportationGet: async (req, res) => {
+    const {tripId} = req.params;
+    const {index} = req.query;
+    console.log(index);
+
+    if (!tripId) { return res.json({error: 'Invalid trip ID.'}); }
+    if (!index) { return res.json({error: 'Invalid location index.'}); }
+    
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Error finding trip by tripId.');
+      return res.redirect('/');
+    }
+
+    if (Number(index) === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
+
+
+    res.json({ response: 'works'});
   }
 }
 
