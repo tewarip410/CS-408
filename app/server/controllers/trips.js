@@ -45,19 +45,24 @@ module.exports = {
     res.render('trips/create-map');
   },
   detailsPost: async (req, res) => {
-    // TODO save our trip info
+    // save trip info
     const {name} = req.body;
     const {date} = req.body;
-    const {roundTrip} = req.body;
-    const {optradio} = req.body;
+    var roundTrip = false;
+    var optradio = req.body.optradio;
     const {duration} = req.body;
     const {order} = req.body;
+    var numPeople = 1; //TODO - change to req.body.numPeople once that gets added to the form
     const {location_data} = req.session.data;
     const {user} = req;
     const nLocations = order.length;
     const locations = [];
     const transportation = [];
     console.log(location_data);
+
+    if (req.body.roundTrip === 'on') {
+      roundTrip = true;
+    }
     for (var i = 0; i < nLocations; i++) {
       transportation.push(
         req.body[`transportation_${i}`]
@@ -81,6 +86,9 @@ module.exports = {
         name,
         start_date: date,
         _userId: user._id,
+        option: optradio,
+        roundtrip: roundTrip,
+        num_people: numPeople,
         locations
       });
     } catch (e) {
@@ -202,7 +210,37 @@ module.exports = {
       return res.redirect('/');
     }
 
-    res.send(trip);
+    res.render('forms/create-form-layout',
+      {
+        page: 'itinerary.ejs',
+        title: `${trip.name} Itinerary • Adventum`,
+        user: req.user,
+        trip
+      });
+  },
+  transportationGet: async (req, res) => {
+    const {tripId} = req.params;
+    const {index} = req.query;
+    console.log(index);
+
+    if (!tripId) { return res.json({error: 'Invalid trip ID.'}); }
+    if (!index) { return res.json({error: 'Invalid location index.'}); }
+    
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Error finding trip by tripId.');
+      return res.redirect('/');
+    }
+
+    if (Number(index) === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
+
+    //const apCodes = await getAirportCodes(trip.locations.length, trip.locations);
+    //const trip_data = await makeTripData(apCodes, trip);
+    //const flight_data = await getFlights(trip_data, trip.option, trip.num_people);
+    //const hotel_data = await getHotels(trip_data);
   }
 }
 
@@ -234,9 +272,9 @@ function call_api(api_call, return_info) {
 async function getAirportCodes(length, locationData) {
   const promises = [];
   for (var i = 0; i < length; i++) {
-    const lat = locationData[i][1];
-    const lng = locationData[i][2];
-    const api_call = "https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
+    const lat = locationData[i].y;
+    const lng = locationData[i].x;
+    const api_call = "https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=L1p5fbab3ElOhCBWvOibeZKDeHwcisi4";
     const get_airport_code = api_call + "&latitude=" + lat + "&longitude=" + lng;
     promises.push(call_api(get_airport_code, 1));
   }
@@ -249,19 +287,19 @@ async function getAirportCodes(length, locationData) {
   }
 }
 
-async function makeTripData(req, apCodes, locationData, tripDate) {
+async function makeTripData(apCodes, trip) {
   let data = [];
   const nLocs = apCodes.length;
-  let date = tripDate;
+  let date = trip.start_date;
   for (var i = 0; i < nLocs; i++) {
     const radio = "exampleRadios " + i;
-    const name = locationData[i][0];
-    const lat = locationData[i][1];
-    const lng = locationData[i][2];
+    const name = trip.locations[i].name;
+    const lat = trip.locations[i].y;
+    const lng = trip.locations[i].x;
     const td = {
-      duration: req.body.duration[i],
-      order: req.body.order[i],
-      transportation: req.body[radio],
+      duration: trip.locations[i].duration,
+      order: i,
+      transportation: trip.locations[i].transportation,
       name,
       lat,
       lng,
@@ -277,12 +315,13 @@ async function makeTripData(req, apCodes, locationData, tripDate) {
   for (var i = 0; i < nLocs; i++) {
     var start_date;
     if (i === 0) {
-      data[i].start_date = date;
-      data[i].end_date = date;
+      data[i].start_date = moment(date).format("YYYY-MM-DD") + '';
+      data[i].end_date = moment(date).format("YYYY-MM-DD") + '';
     }
     else {
-      start_date = date;
-      var date_split = date.split('-');
+      start_date = moment(date).format("YYYY-MM-DD") + '';
+      console.log(start_date);
+      var date_split = start_date.split('-');
       date = moment([Number(date_split[0]), Number(date_split[1]) - 1, Number(date_split[2])]).add(Number(data[i].duration), 'days');
       date = moment(date).format("YYYY-MM-DD");
       data[i].start_date = start_date;
@@ -292,7 +331,7 @@ async function makeTripData(req, apCodes, locationData, tripDate) {
   return data;
 }
 
-async function getFlights(trip_data, efficiency) {
+async function getFlights(trip_data, efficiency, numPeople) {
   const trip_promises = [];
   for (var i = 0; i < trip_data.length; i++) {
     if (trip_data[i].transportation === 'plane') {
@@ -304,11 +343,11 @@ async function getFlights(trip_data, efficiency) {
         const origin = trip_data[i-1].apCode;
         const destination = trip_data[i].apCode;
         const departure_date = trip_data[i].start_date;
-        api_call = `https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=${process.env.AMADEUS_API}&origin=${origin}&destination=${destination}&departure_date=${departure_date}`;
+        api_call = `https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=L1p5fbab3ElOhCBWvOibeZKDeHwcisi4&origin=${origin}&destination=${destination}&departure_date=${departure_date}&number_of_results=5`;
         if (efficiency === 'te') {
           api_call = api_call + "&nonstop=true";
         }
-        // console.log(api_call);
+        api_call = api_call + "&adults=" + numPeople;
         trip_promises.push(call_api(api_call, 2));
       }
     }
@@ -331,8 +370,8 @@ async function getHotels(trip_data) {
       var check_out = trip_data[i].end_date;
 
       if (check_in != check_out) {
-        api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=wrrt6wCJMvGOywCv2FNXc4GtQtYXXsoH";
-        api_call = api_call + "&latitude=" + trip_data[i].lat + "&longitude=" + trip_data[i].lng + "&radius=50" + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD";
+        api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=L1p5fbab3ElOhCBWvOibeZKDeHwcisi4";
+        api_call = api_call + "&latitude=" + trip_data[i].lat + "&longitude=" + trip_data[i].lng + "&radius=50" + "&check_in=" + check_in + "&check_out=" + check_out + "&lang=EN&currency=USD&number_of_results=5";
         hotel_promises.push(call_api(api_call, 3));
       }
     }
