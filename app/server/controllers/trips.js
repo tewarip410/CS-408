@@ -38,16 +38,21 @@ module.exports = {
     // save trip info
     const {name} = req.body;
     const {date} = req.body;
-    const {roundTrip} = req.body;
-    const {optradio} = req.body;
+    var roundTrip = false;
+    var optradio = req.body.optradio;
     const {duration} = req.body;
     const {order} = req.body;
+    var numPeople = 1; //TODO - change to req.body.numPeople once that gets added to the form
     const {location_data} = req.session.data;
     const {user} = req;
     const nLocations = order.length;
     const locations = [];
     const transportation = [];
     console.log(location_data);
+
+    if (req.body.roundTrip === 'on') {
+      roundTrip = true;
+    }
     for (var i = 0; i < nLocations; i++) {
       transportation.push(
         req.body[`transportation_${i}`]
@@ -71,9 +76,10 @@ module.exports = {
         name,
         start_date: date,
         _userId: user._id,
-        locations,
-        optradio,
-        roundTrip
+        option: optradio,
+        roundtrip: roundTrip,
+        num_people: numPeople,
+        locations
       });
     } catch (e) {
       console.log(e);
@@ -221,9 +227,9 @@ module.exports = {
 
     if (Number(index) === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
 
-    const apCodes = await getAirportCodes(trip.locations.length, trip.locations);
-    const trip_data = await makeTripData(apCodes, trip);
-    const flight_data = await getFlights(trip_data, trip.optradio);
+    //const apCodes = await getAirportCodes(trip.locations.length, trip.locations);
+    //const trip_data = await makeTripData(apCodes, trip);
+    //const flight_data = await getFlights(trip_data, trip.option, trip.num_people);
     //const hotel_data = await getHotels(trip_data);
   }
 }
@@ -315,7 +321,7 @@ async function makeTripData(apCodes, trip) {
   return data;
 }
 
-async function getFlights(trip_data, efficiency) {
+async function getFlights(trip_data, efficiency, numPeople) {
   const trip_promises = [];
   for (var i = 0; i < trip_data.length; i++) {
     if (trip_data[i].transportation === 'plane') {
@@ -331,7 +337,7 @@ async function getFlights(trip_data, efficiency) {
         if (efficiency === 'te') {
           api_call = api_call + "&nonstop=true";
         }
-        // console.log(api_call);
+        api_call = api_call + "&adults=" + numPeople;
         trip_promises.push(call_api(api_call, 2));
       }
     }
