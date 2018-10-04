@@ -1,25 +1,53 @@
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" 
-integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
-<div class="card">
-    <h5 class="card-header">Travel Itinerary</h5>
-    <div class="card-body">
-      <h5 class="card-title">Flights</h5>
-      <% for (var i = 0; i < flights.length; i++) { %>
-        <p class="card-text">Departure: <%= flights[i].departure %> from <%= flights[i].origin %></p>
-        <p class="card-text">Arrival: <%= flights[i].arrival %> at <%= flights[i].dest %></p>
-        <p class="card-text">Airline: <%= flights[i].airline %></p>
-        <p class="card-text">Flight Number: <%= flights[i].flight_number %></p>
-        <p class="card-text">Seat: <%= flights[i].travel_class %></p>
-        <p class="card-text">Total Ticket Cost: <%= flight_prices[i] %></p>
-      <% } %>
-      <h5 class="card-title">Hotels</h5>
-      <% for (var i = 0; i < hotels.length; i++) { %>
-        <p class="card-text">Hotel: <%= hotels[i].name %></p>
-        <p class="card-text">Address: <%= hotels[i].addr %></p>
-        <p class="card-text">Total Cost: <%= hotel_prices[i] %></p>
-      <% } %>
-      <a href="/trips/create/details" class="fas fa-arrow-left fa-2x"></a>
-      <a href="#" class="btn btn-primary">Save Itinerary!</a>
-    </div>
+<div class="container mt-3">
+  <% if (locals.trip) { %>
+    <h3>Trip name: <%= trip.name %></h3>
+    <h3>Start date: <%= trip.start_date %></h3>
+    <% for (var i = 0; i < trip.locations.length; i++) { %>
+      <div class="card my-3">
+        <div class="card-header">
+          <h4><%= trip.locations[i]['name'] %></h4>
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Flights</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Hotels</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="flights" id="flights_<%=i%>">
+            <i class="fa fa-spinner fa-spin" id="flight_spinner_<%=i%>"></i>
+          </div>
+          <div class="hotels" id="hotels_<%=i%>">
+            <i class="fa fa-spinner fa-spin" id="hotel_spinner_<%=i%>"></i>
+          </div>
+          <% if (i < trip.locations.length - 1) { %>
+            <script>
+              $.ajax({
+                datatype: 'json',
+                url: '<%=trip._id%>/' + 'transportation',
+                type: 'get',
+                data: {
+                  index: '<%=i%>'
+                },
+                success: function(data) {
+                  console.log('received response:')
+                  console.log(data);
+                }
+              });
+            </script>
+          <% } %>
+          <script>
+          
+          </script>
+          <!--
+          <h5>Card content- says one of the two based on the tab chosen:</h5>
+          <h5>Hotels in Chicago from 9/26/18 to 10/1/18</h5>
+          <h5>Flights from Chicago to New York on 10/1/18</h5>
+          -->
+        </div>
+      </div>
+    <% } %>
+  <% } %>
 </div>

@@ -29,9 +29,13 @@ const location = Schema({
 
 const tripSchema = Schema({
   name: String,
-  start_data: Date,
+  start_date: Date,
   _userId: Schema.Types.ObjectId,
-  locations: [location]
+  option: String,
+  roundtrip: Boolean,
+  num_people: Number,
+  locations: [location],
+  favorite: Boolean
 });
 
 const Trip = mongoose.model('Trip', tripSchema);
