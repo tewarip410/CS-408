@@ -8,108 +8,123 @@
 
 <link href="../../public/css/form.css" rel="stylesheet" type="text/css" />
 <br>
-<div class="card w-75 p-3 " style="width: 21.5em; margin:0 auto;">
     <% if (locals.data) { %>
     <form onsubmit="return checker();" method="post" id="travel_form" style="text-align: center">
         <br>
-        <div class="card">
-            <span class="form-inline">
-                <div class="mx-auto form-inline pt-4"><input class="form-control text-center" type="text" id="title"
-                        placeholder="Enter the name of your trip" style="width: 30rem; height: 2.5rem ;"></div>
-            </span>
-            <br>
-            <span class="form-inline">
+        <div class="container">
+            <div class="row justify-content-between">
+            <div class="card w-75 p-3 col-5" style="height: 25em; margin:0 auto;">
+                <span class="form-inline">
+                    <div class="mx-auto form-inline pt-4"><input class="form-control text-center" type="text" id="title"
+                            placeholder="Enter the name of your trip" style="width: 25rem; height: 2.5rem;"></div>
+                </span>
                 <br>
-                <div class="mx-auto form-inline"><label class="pr-3" for="datepicker">Start date</label>
-                    <input name="date" id="datepicker" width="276" /></div>
+                <span class="form-inline" style="padding-top: 1rem">
+                    <br>
+                    <div class="mx-auto form-inline"><label class="pr-3" for="datepicker">Start date</label>
+                        <input name="date" id="datepicker" width="276" /></div>
 
-            </span>
-            <br>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="rt" id="gridCheck">
-                    <label class="form-check-label">
-                        Round Trip?
-                    </label>
-                </div>
-            </div>
-
-            <span>
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cheapest
-                    </label>
-                </div>
-                <div class="form-check form-check-inline pb-4">
-                    <label class="form-check-label">
-                        <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Fastest
-                    </label>
-                </div>
-            </span>
-        </div>
-
-        <br>
-        <div class="drag-list">
-            <% var i = 0; %>
-            <% data.location_data.forEach((obj) => { %>
-            <div class="drag-item">
-                <div class="form-group pt-2">
-                    <label class="h5">
-                        <%- obj[0] %></label>
-                    <span class="form-inline">
-                        <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
-                                name="duration" id="<%- obj[0] %>-stay">
-                                </div>
-                    </span>
-                </div>
-
-                <span class="form-check form-check-inline pb-2">
+                </span>
+                <br>
+                <div class="form-group" style="padding-top: 1rem">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
+                        <input class="form-check-input" type="checkbox" name="rt" id="gridCheck">
                         <label class="form-check-label">
-                            Plane
+                            Round Trip?
                         </label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
+                </div>
+
+                <span>
+                    <div class="form-check form-check-inline">
                         <label class="form-check-label">
-                            Train
+                            <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cheapest
                         </label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
+                    <div class="form-check form-check-inline pb-4">
                         <label class="form-check-label">
-                            Car
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4"
-                            checked>
-                        <label class="form-check-label">
-                            Other
+                            <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Fastest
                         </label>
                     </div>
                 </span>
+
+                <div class="form-group">
+                    <label for="exampleSelect1">Select number of people traveling</label>
+                    <select class="form-control" id="select" name="numPeople">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                    </select>
+                </div>
+
+                <div class="container">
+                        <div class="row justify-content-center">
+                            <a href="/trips/create" class="fas fa-arrow-left fa-2x" style="padding-top: .90rem; padding-right: 1rem"></a>
+                            <button type="submit" class="btn btn-primary">Plan my vacation!</button>
+                            <a href="/trips/create" id="cancel" name="cancel" class="btn btn-primary">Cancel</a>
+                        </div>
+                </div>
             </div>
-            <% i++; %>
-            <% }) %>
-        </div>
 
+            <br>
+            <div class="card w-75 p-3 col-6" style="width: 21.5em; margin:0 auto;">
+                <div class="drag-list">
+                    <% var i = 0; %>
+                    <% data.location_data.forEach((obj) => { %>
+                    <div class="drag-item">
+                        <div class="form-group pt-2">
+                            <label class="h5">
+                                <%- obj[0] %></label>
+                            <span class="form-inline">
+                                <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
+                                        name="duration" id="<%- obj[0] %>-stay">
+                                        </div>
+                            </span>
+                        </div>
 
-        <br>
-        
-        <span class="form-inline ">
-                <a href="/trips/create" class="fas fa-arrow-left fa-2x"></a>
-            <div class="mx-auto form-inline">
-        
-        <button type="submit" class="btn btn-primary">Plan my vacation!</button>
-        <a href="http://localhost:8081/" id="cancel" name="cancel" class="btn btn-primary">Cancel</a>
-        </div>
-        </span>
-
+                        <span class="form-check form-check-inline pb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
+                                <label class="form-check-label">
+                                    Plane
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
+                                <label class="form-check-label">
+                                    Train
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
+                                <label class="form-check-label">
+                                    Car
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4"
+                                    checked>
+                                <label class="form-check-label">
+                                    Other
+                                </label>
+                            </div>
+                        </span>
+                    </div>
+                    <% i++; %>
+                    <% }) %>
+                </div>
+            </div>
+            <br>
+            </div>
+    </div>
     </form>
     <% } %>
-</div>
 
 <script>
     $(".drag-list").sortable({
@@ -194,19 +209,6 @@
             checked = false;
         }
 
-        // if (orderInput) {
-        //     console.log(orderInput);
-        //     for (var i = 0; i < orderInput.length; i++) {
-        //         if (!orderInput[i].value || isNaN(orderInput[i].value) || orderInput[i].value < 0) {
-        //             checked = false;
-        //         }
-        //     }
-        //     console.log("order checked")
-        // }
-        // else {
-        //     checked = false;
-        // }
-
         if (titleInput && titleInput.value) {
             console.log("title checked")
         }
@@ -225,5 +227,5 @@
     }
 
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+</script>
