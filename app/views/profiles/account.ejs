@@ -1,0 +1,67 @@
+<div class="row p-rel ml-3 mt-5">
+  <h3 class="col-5"><u>Account Name</u></h3>
+  <h3 class="col-6"><u>Email</u></h3>
+  <h4 class="col-5"><%=user.name%></h4>
+  <h4 class="col-6 ml-1"><%=user.email%></h4>
+  <h3 class="col-5"><u>Bio</u></h3>
+  <h3 class="col-6 ml-1"><u>User status</u></h3>
+  <p class="col-5"><%=user.bio%></p>
+  <h4 class="col-6 ml-1">Platinum Member</h4>
+
+<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#accountModal">Edit account information</button>
+
+<!-- Modal -->
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered text-center" role="document">
+    <div class="modal-content text-center modal-center">
+
+      <form method="post" action="/profiles/<%=user.googleId%>">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" value="<%=user.email%>" disabled>
+        </div>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="name" class="form-control" id="name" name="name" value="<%=user.name%>">
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea class="form-control" id="bio" rows="3" name="bio"><%=user.bio%></textarea>
+        </div>
+        <button type="submit" class="btn btn-success btn-prof d-inline">Save</button>
+        <button type="button" class="btn btn-danger btn-prof" onclick="triggerDelete()" id="deleteBtn">Delete</button>
+        <div class="d-none" id="deleteEl">
+          <p>Are you sure you would like to delete your account? This cannot be reversed!</p>
+          <button type="button" class="btn btn-danger" onclick="deleteAcc()">Yes, delete my account</button>
+          <button type="button" class="btn btn-primary" onclick="cancelDelete()">Cancel</button>
+        </div>
+      </form>
+
+      <form action="?_method=delete" method="post" id="deleteForm">
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- <div class="container text-center">
+  <form method="post" action="/profiles/<%=user.googleId%>">
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" id="email" value="<%=user.email%>" disabled>
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="name" class="form-control" id="name" name="name" value="<%=user.name%>">
+    </div>
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <textarea class="form-control" id="bio" rows="3" name="bio"><%=user.bio%></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+  <form action="?_method=delete" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div> -->

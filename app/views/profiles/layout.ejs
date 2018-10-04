@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%- include('../includes/head.ejs') %>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+    <script src="/public/js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+    <% if (locals.title) { %>
+      <title><%= title %></title>
+    <% } else { %>
+      <title>Profile • Adventum</title>
+    <% } %>
+    <% if (locals.stylesheet) { %>
+      <link rel="stylesheet" href="/public/css/<%=stylesheet%>">
+    <% } %>
+  </head>
+  <!--/ Body block -->
+  <body onload="body_onload()">
+    <header>
+      <% include ../../partials/header %>
+    </header>
+    <div class="container">
+      <!-- image container -->
+      <div class="text-center p-rel">
+        <img src="/public/pics/profile.png" class="w-100" alt="Responsive image">
+        <!-- card within image -->
+        <div class="card card-profile">
+          <div class="card-header text-white">
+            <div>
+              <h2><b>Hello, <%= user.name %></b></h2>
+            </div>
+          </div>
+          <div class="card-body">
+
+          </div>
+        </div>
+        <!-- button container -->
+        <div class="btn-container row">
+          <div id="btn1" class="col-4 d-inline-block box_buttons text-center text-white active" onclick="box_click1()">
+              <img width="50" height="50" src="/public/pics/summary.svg" class="ing-fluid rounded mt-1">
+              <h3 class="mt-2">Account Summary</h3>
+          </div>
+          <div id="btn2" class="col-4 d-inline-block box_buttons text-center text-white" onclick="box_click2()">
+            <img width="50" height="50" src="/public/pics/plane.svg" class="ing-fluid rounded mt-1">
+            <h3 class="mt-2">Past Trips</h3>
+          </div>
+          <div id="btn3" class="col-4 d-inline-block box_buttons text-center text-white" onclick="box_click3()">
+            <img width="50" height="50" src="/public/pics/carrier.svg" class="ing-fluid rounded mt-1">
+            <h3 class="mt-2">Current Trip</h3>
+          </div>
+        </div>
+        <!-- triangles btn container -->
+        <div class="triangle-btn-container row">
+          <div class="col-4 text-center">
+            <i  id="id_triangle1" class="fa fa-caret-down prof-triangle"></i>
+          </div>
+          <div class="col-4 text-center">
+            <i  id="id_triangle2" class="fa fa-caret-down prof-triangle"></i>
+          </div>
+          <div class="col-4 text-center">
+            <i  id="id_triangle3" class="fa fa-caret-down prof-triangle"></i>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+
+      </div>
+
+      <div id="id_box1">
+        <% include ./account.ejs %>
+      </div>
+
+      <div id="id_box2">
+        <% include ./past-trips.ejs %>
+      </div>
+
+      <div id="id_box3">
+        <% include ./current-trip.ejs %>
+      </div>
+
+      <div class="mt-5 invisible">Adventum</div>
+      <div class="mt-5 invisible">Adventum</div>
+      <div class="mt-5">Adventum</div>
+
+  </div>
+
+
+    <!--// Scripts -->
+    <script type="text/javascript" src="/public/js/scripts/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/public/js/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/public/js/scripts/mdb.min.js"></script>
+    <script type="text/javascript" src="/public/js/profile.js"></script>
+    <!-- Scripts //-->
+  </body>
+  <!-- Body block /-->
+
+</html>
