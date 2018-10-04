@@ -4,22 +4,63 @@ body {
 
   height: 100%;
 }
-.top-left {
+
+.p-rel {
+  position: relative;
+}
+
+.card-profile {
+  background-color: #000;
+  border-radius: 6px;
+  opacity: 0.6;
   position: absolute;
-  top: 10%;
+  top: 2rem;
   left:50%;
   transform: translateX(-50%);
+  width: 80%;
 }
+
+.btn-container {
+  position: absolute;
+  bottom: 0;
+  left:50%;
+  transform: translateX(-50%);
+  width: 100%;
+  margin-left: 0px !important;
+}
+
+.triangle-btn-container {
+  position: absolute;
+  bottom: -2.3rem;
+  left:50%;
+  transform: translateX(-50%);
+  width: 100%;
+  margin-left: 0px !important;
+}
+
 .my-btn-group {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
 }
 .box_buttons {
-  background-color: lightseagreen;
-  /* border: 2px solid darkblue; */
+  background-color: #000;
+  opacity: 0.6;
+  cursor:pointer;
 }
 .box_buttons:hover {
-  background-color: lightslategray;
-  cursor:pointer;
+  opacity: 0.8;
+}
+
+.prof-triangle {
+  font-size: 4em !important;
+  color: #000;
+}
+
+.active {
+  opacity: 0.8;
+}
+
+.btn-prof {
+  min-width: 200px;
 }
