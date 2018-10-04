@@ -31,7 +31,7 @@ const tripSchema = Schema({
   name: String,
   start_date: Date,
   _userId: Schema.Types.ObjectId,
-  option: String,
+  trpriority: String,
   roundtrip: Boolean,
   num_people: Number,
   locations: [location],

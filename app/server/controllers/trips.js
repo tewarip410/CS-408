@@ -86,7 +86,7 @@ module.exports = {
         name,
         start_date: date,
         _userId: user._id,
-        option: optradio,
+        trpriority: optradio,
         roundtrip: roundTrip,
         num_people: numPeople,
         locations
@@ -239,7 +239,7 @@ module.exports = {
 
     //const apCodes = await getAirportCodes(trip.locations.length, trip.locations);
     //const trip_data = await makeTripData(apCodes, trip);
-    //const flight_data = await getFlights(trip_data, trip.option, trip.num_people);
+    //const flight_data = await getFlights(trip_data, trip.trpriority, trip.num_people);
     //const hotel_data = await getHotels(trip_data);
   }
 }
