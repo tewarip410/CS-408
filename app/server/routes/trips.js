@@ -9,11 +9,7 @@ router.get('/create', authController.ensureAuthenticated, tripController.createG
 router.get('/tourist-map', authController.ensureAuthenticated, tripController.createTouristGet);
 router.post('/', authController.ensureAuthenticated, tripController.tripsPost);
 router.post('/create/details', authController.ensureAuthenticated, tripController.detailsPost);
-<<<<<<< Updated upstream
 // TODO access control for trips (in authController)
 router.get('/:tripId', authController.ensureAuthenticated, tripController.tripGet);
 router.get('/:tripId/transportation', authController.ensureAuthenticated, tripController.transportationGet);
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> Stashed changes
