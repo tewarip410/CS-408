@@ -217,7 +217,7 @@
         }
         if (durationInput) {
             for (var i = 0; i < durationInput.length; i++) {
-                if (!durationInput[i].value || isNaN(durationInput[i].value || durationInput[i].value < 0)) {
+                if ((!durationInput[i].value || isNaN(durationInput[i].value) || durationInput[i].value < 0) && !durationInput[i].disabled) {
                     checked = false;
                 }
             }
