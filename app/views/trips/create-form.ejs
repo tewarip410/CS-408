@@ -56,6 +56,8 @@
                                 </label>
                             </div>
                         </span>
+
+                        <button type="button" onclick="toggleDisabled(this.id)" id="<%- obj[0] %>" class="btn danger-color-dark btn-sm" style="padding-left: 1.05rem; padding-right: 0.75rem"><i class="fa fa-trash mr-1"></i></button>
                     </div>
                     <% i++; %>
                     <% }) %>
@@ -171,6 +173,23 @@
 </script>
 
 <script>
+    function toggleDisabled(id) {
+        if ($(document.getElementById(id + "-stay")).prop( "disabled") === false) {
+            $(document.getElementById(id + "-stay")).prop( "disabled", true );
+            $(document.getElementById(id + "-r1")).prop( "disabled", true );
+            $(document.getElementById(id + "-r2")).prop( "disabled", true );
+            $(document.getElementById(id + "-r3")).prop( "disabled", true );
+            $(document.getElementById(id + "-r4")).prop( "disabled", true );
+        }
+        else {
+            $(document.getElementById(id + "-stay")).prop( "disabled", false );
+            $(document.getElementById(id + "-r1")).prop( "disabled", false );
+            $(document.getElementById(id + "-r2")).prop( "disabled", false );
+            $(document.getElementById(id + "-r3")).prop( "disabled", false );
+            $(document.getElementById(id + "-r4")).prop( "disabled", false );
+        }
+    }
+
     $('#datepicker').datepicker({
         uiLibrary: 'fontawesome'
     });
