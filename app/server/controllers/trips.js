@@ -69,7 +69,7 @@ module.exports = {
             name: location_data[j][0],
             x: location_data[j][2],
             y: location_data[j][1],
-            duration: duration[j],
+            duration: duration[i],
             transportation: req.body['exampleRadios ' + location_data[j][3]]
           });
         }
