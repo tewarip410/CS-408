@@ -46,44 +46,40 @@ module.exports = {
   },
   detailsPost: async (req, res) => {
     // save trip info
-    const {name} = req.body;
+    var name = req.body.title;
     const {date} = req.body;
     var roundTrip = false;
     var optradio = req.body.optradio;
     const {duration} = req.body;
-    const {order} = req.body;
-    var numPeople = 1; //TODO - change to req.body.numPeople once that gets added to the form
+    var numPeople = req.body.numPeople;
     const {location_data} = req.session.data;
     const {user} = req;
-    const nLocations = order.length;
+    const nLocations = duration.length;
     const locations = [];
-    const transportation = [];
-    console.log(location_data);
-
+    const order = JSON.parse(req.body.order);
     if (req.body.roundTrip === 'on') {
       roundTrip = true;
     }
-    for (var i = 0; i < nLocations; i++) {
-      transportation.push(
-        req.body[`transportation_${i}`]
-      );
-    }
+
     for (var i = 0; i < nLocations; i++) {
       // if (removed[i]) { continue; }
-      // TODO use order to sort first
-      locations.push({
-        name: location_data[i][0],
-        x: location_data[i][2],
-        y: location_data[i][1],
-        duration: duration[i],
-        transportation: transportation[i]
-      });
+      for (var j = 0; j < nLocations; j++) {
+        if (order[i] === location_data[j][0]) {
+          locations.push({
+            name: location_data[j][0],
+            x: location_data[j][2],
+            y: location_data[j][1],
+            duration: duration[j],
+            transportation: req.body['exampleRadios ' + location_data[j][3]]
+          });
+        }
+      }
     }
 
     let trip;
     try {
       trip = await Trip.create({
-        name,
+        name: name,
         start_date: date,
         _userId: user._id,
         trpriority: optradio,
@@ -307,10 +303,6 @@ async function makeTripData(apCodes, trip) {
     };
     data.push(td)
   }
-
-  data = data.sort(function(a,b) {
-    return a.order - b.order;
-  });
 
   for (var i = 0; i < nLocs; i++) {
     var start_date;

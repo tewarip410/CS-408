@@ -198,7 +198,7 @@
         
         for (var i = 0; i < markers.length; i++) {
           if (markers[i] !== null) {
-            var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng()];
+            var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng(), i];
             location_data.push(data);
           }
         }

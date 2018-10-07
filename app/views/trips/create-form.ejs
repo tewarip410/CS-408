@@ -10,6 +10,7 @@
 <br>
     <% if (locals.data) { %>
     <form onsubmit="return checker();" method="post" id="travel_form" style="text-align: center">
+        <input type="hidden" id="order" name="order" value="" />
         <br>
         <div class="container">
             <div class="row justify-content-between">
@@ -20,9 +21,10 @@
                     <% data.location_data.forEach((obj) => { %>
                     <div class="drag-item">
                         <div class="form-group pt-2">
-                            <label class="h5">
+                            <label class="h5" text="place_name">
                                 <%- obj[0] %></label>
                             <span class="form-inline">
+                                <i class="fa fa-sort mr-1" aria-hidden="true"></i>
                                 <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
                                         name="duration" id="<%- obj[0] %>-stay">
                                         </div>
@@ -66,7 +68,7 @@
             <br>
             <div class="card w-75 p-3 col-5" style="height: 25em; margin:0 auto;">
                 <span class="form-inline">
-                    <div class="mx-auto form-inline pt-4"><input class="form-control text-center" type="text" id="title"
+                    <div class="mx-auto form-inline pt-4"><input class="form-control text-center" type="text" id="title" name="title"
                             placeholder="Enter the name of your trip" style="width: 25rem; height: 2.5rem;"></div>
                 </span>
                 <br>
@@ -166,7 +168,6 @@
             });
         },
         stop: function (e, ui) {
-            console.log($(".drag-list drag-item").first().text());
             $(".slide-placeholder-animator").remove();
         },
     });
@@ -195,6 +196,16 @@
     });
 
     function checker() {
+        var $list = $(".drag-list");
+        var listElements = $list.children();
+        var order = [];
+        for (var i = 0; i < listElements.length; i++) {
+            var e = listElements[i].firstElementChild.firstElementChild;
+            var name = (e.innerHTML).trim();
+            order.push(name);
+        }
+        $('#travel_form > input').val(JSON.stringify(order));
+
         var x = true;
         var checked = true;
         if (x = document.getElementsByClassName("form-check-input")) {
