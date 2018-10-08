@@ -54,16 +54,16 @@ module.exports = {
     var numPeople = req.body.numPeople;
     const {location_data} = req.session.data;
     const {user} = req;
-    const nLocations = duration.length;
     const locations = [];
     const order = JSON.parse(req.body.order);
+    const nLocations = order.length;
+
     if (req.body.roundTrip === 'on') {
       roundTrip = true;
     }
 
     for (var i = 0; i < nLocations; i++) {
-      // if (removed[i]) { continue; }
-      for (var j = 0; j < nLocations; j++) {
+      for (var j = 0; j < location_data.length; j++) {
         if (order[i] === location_data[j][0]) {
           locations.push({
             name: location_data[j][0],

@@ -20,6 +20,7 @@
                     <% var i = 0; %>
                     <% data.location_data.forEach((obj) => { %>
                     <div class="drag-item">
+                        <!-- Don't put anything above this form-group, it will mess up how the order is made! -->
                         <div class="form-group pt-2">
                             <label class="h5" text="place_name">
                                 <%- obj[0] %></label>
@@ -60,6 +61,7 @@
                         </span>
 
                         <button type="button" onclick="toggleDisabled(this.id)" id="<%- obj[0] %>" class="btn danger-color-dark btn-sm" style="padding-left: 1.05rem; padding-right: 0.75rem"><i class="fa fa-trash mr-1"></i></button>
+                        <input type="hidden" id="<%- obj[0] %>-removed" name="removed" value="false" />
                     </div>
                     <% i++; %>
                     <% }) %>
@@ -177,6 +179,8 @@
     function toggleDisabled(id) {
         if ($(document.getElementById(id + "-stay")).prop( "disabled") === false) {
             $(document.getElementById(id + "-stay")).prop( "disabled", true );
+            $(document.getElementById(id + "-stay")).val('');
+            $(document.getElementById(id + "-removed")).val("true");
             $(document.getElementById(id + "-r1")).prop( "disabled", true );
             $(document.getElementById(id + "-r2")).prop( "disabled", true );
             $(document.getElementById(id + "-r3")).prop( "disabled", true );
@@ -184,6 +188,7 @@
         }
         else {
             $(document.getElementById(id + "-stay")).prop( "disabled", false );
+            $(document.getElementById(id + "-removed")).val("false");
             $(document.getElementById(id + "-r1")).prop( "disabled", false );
             $(document.getElementById(id + "-r2")).prop( "disabled", false );
             $(document.getElementById(id + "-r3")).prop( "disabled", false );
@@ -202,7 +207,10 @@
         for (var i = 0; i < listElements.length; i++) {
             var e = listElements[i].firstElementChild.firstElementChild;
             var name = (e.innerHTML).trim();
-            order.push(name);
+            var removed = $(document.getElementById(name + "-removed")).val();
+            if (removed === 'false') {
+                order.push(name);
+            }
         }
         $('#travel_form > input').val(JSON.stringify(order));
 
