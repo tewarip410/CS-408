@@ -1,3 +1,7 @@
+    <script>
+      var locations = [];
+    </script>    
+    
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div class="outer-map">
       <div id="map"></div>
@@ -8,6 +12,14 @@
         <input onclick="submitMarkers();" type=button class="btn my-primary" value="Finish">
       </div>
     </div>
+    
+    <% if (prev_locations.location_data) { %>
+      <% prev_locations.location_data.forEach((obj) => { %>
+        <script>
+          locations.push([<%- obj[1] %>, <%- obj[2] %>]);
+        </script>
+      <% }) %>
+    <% } %>
     <script>
       // In the following example, markers appear when the user clicks on the map.
       // The markers are stored in an array.
@@ -100,6 +112,10 @@
         document.getElementById('submit').addEventListener('click', function() {
           geocodeLatLng(geocoder, map, infowindow);
         });
+
+        for (var j = 0; j < locations.length; j++) {
+          addPrevMarker(locations[j][0], locations[j][1], geocoder, map);
+        }
       }
 
       function geocodeLatLng(geocoder, map, infowindow) {
@@ -156,7 +172,29 @@
             }
           }
         });
-        
+      }
+
+      function addPrevMarker(lat, lng, geocoder, map) {
+        var latlng = {lat: lat, lng: lng};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                title: results[0].formatted_address
+              });
+              var infowindow = new google.maps.InfoWindow({
+                  content: results[0].formatted_address
+              });
+              infowindow.open(map, marker);
+              markers.push(marker);
+              marker.addListener('click', function(event) {
+                delMarker(marker.position.lat(), marker.position.lng());
+              });
+            }
+          }
+        });
       }
 
       var delMarker = function (lat, lng) {

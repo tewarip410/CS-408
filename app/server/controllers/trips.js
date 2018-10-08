@@ -25,8 +25,19 @@ module.exports = {
         page: 'create-map.ejs',
         stylesheet: 'map.css',
         title: 'Select Locations • Adventum',
-        user: req.user
+        user: req.user,
+        prev_locations: []
       });
+  },
+
+  createPrevMapGet: async(req, res) => {
+    res.render('forms/create-form-layout', {
+      page: 'create-map.ejs',
+      stylesheet: 'map.css',
+      title: 'Select Locations • Adventum',
+      user: req.user,
+      prev_locations: req.session.data
+    });
   },
 
   createTouristGet: async(req, res) => {
@@ -42,8 +53,11 @@ module.exports = {
   // POST /
   tripsPost: async (req, res) => {
     req.session.data = req.body;
-    res.render('trips/create-map');
+    res.render('trips/create-map', {
+      prev_locations: []
+    });
   },
+
   detailsPost: async (req, res) => {
     // save trip info
     var name = req.body.title;
