@@ -1,0 +1,15 @@
+.navbar {
+    padding: 0rem 1rem !important;
+    height: 64px;
+}
+
+li.mainnav{
+    height: 64px;
+    padding-top: 17px;
+
+}
+
+li.mainnav:hover{
+    border-bottom: 3px solid rgb(7, 2, 82);
+}
+
