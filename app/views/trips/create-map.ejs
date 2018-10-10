@@ -13,7 +13,7 @@
       </div>
     </div>
     
-    <% if (prev_locations.location_data) { %>
+    <% if (locals.prev_locations && prev_locations.location_data) { %>
       <% prev_locations.location_data.forEach((obj) => { %>
         <script>
           locations.push([<%- obj[1] %>, <%- obj[2] %>]);

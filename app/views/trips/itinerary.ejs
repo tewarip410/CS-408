@@ -1,45 +1,113 @@
+<style>
+  .flight-body {
+    width: 90%;
+    position: relative;
+    z-index: 0;
+  }
+  .chevron {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+  }
+</style>
 <div class="container mt-3">
   <% if (locals.trip) { %>
     <h3>Trip name: <%= trip.name %></h3>
-    <h3>Start date: <%= trip.start_date %></h3>
+    <h3 id="startDate">Start date: <%= trip.start_date %></h3>
+    <script>
+      var flight_info = [];
+      $(function() {
+        $('#startDate').text(`Start Date: ${moment('<%=trip.start_date%>').format('MM-DD-YYYY')}`)
+      })
+    </script>
     <% for (var i = 0; i < trip.locations.length; i++) { %>
       <div class="card my-3">
         <div class="card-header">
           <h4><%= trip.locations[i]['name'] %></h4>
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Flights</a>
+              <p class="nav-link active" id="nav_flights_<%=i%>" onclick="show_flights(Number('<%=i%>'))">Flights</p>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Hotels</a>
+              <p class="nav-link" id="nav_hotels_<%=i%>" onclick="show_hotels(Number('<%=i%>'))">Hotels</p>
             </li>
           </ul>
         </div>
         <div class="card-body">
           <div class="flights" id="flights_<%=i%>">
-            <i class="fa fa-spinner fa-spin" id="flight_spinner_<%=i%>"></i>
+            <i class="fa fa-spinner fa-spin d-none" id="flight_spinner_<%=i%>"></i>
+            <div class="d-none text-center" id="flight_data_<%=i%>">
+              <div class="d-inline-block align-middle chevron">
+                  <i class="fa fa-chevron-left" id="flight_prev_<%=i%>"></i>
+              </div>
+              <div class="d-inline-block align-middle flight-body" id="flight_body_<%=i%>">
+
+              </div>
+              <div class="d-inline-block align-middle chevron">
+                <i class="fa fa-chevron-right" id="flight_next_<%=i%>"></i>
+              </div>
+              <script>
+                $(function () {
+                  $('#flight_next_<%=i%>').click(function () {
+                    fill_flight_info(Number('<%=i%>'),'next');
+                  })
+                  $('#flight_prev_<%=i%>').click(function () {
+                    fill_flight_info(Number('<%=i%>'),'prev');
+                  })
+                })
+              </script>
+            </div>
           </div>
-          <div class="hotels" id="hotels_<%=i%>">
+          <div class="hotels d-none" id="hotels_<%=i%>">
             <i class="fa fa-spinner fa-spin" id="hotel_spinner_<%=i%>"></i>
           </div>
           <% if (i < trip.locations.length - 1) { %>
             <script>
+              flight_info.push({ page: 0, data: null });
+              $(`#flight_spinner_<%=i%>`).removeClass('d-none');
               $.ajax({
                 datatype: 'json',
                 url: '<%=trip._id%>/' + 'transportation',
                 type: 'get',
                 data: {
+                  type: 'flight',
                   index: '<%=i%>'
                 },
                 success: function(data) {
-                  console.log('received response:')
+                  var results = data['results'];
+                  if (!results) {
+                    return console.log('something went wrong...\n' + data);
+                  }
+                  flight_info[Number('<%=i%>')]['data'] = results;
+                  $( document ).ready(function() {
+                    fill_flight_info('<%=i%>', null);
+                  });
+                },
+                error: function(data) {
+                  console.log('error:');
                   console.log(data);
                 }
               });
             </script>
           <% } %>
           <script>
-          
+            $.ajax({
+              datatype: 'json',
+              url: '<%=trip._id%>/' + 'transportation',
+              type: 'get',
+              data: {
+                type: 'hotel',
+                index: '<%=i%>'
+              },
+              success: function(data) {
+               // console.log('received response:')
+             //   console.log(data);
+              },
+              error: function(data) {
+                console.log('error:');
+                console.log(data);
+              }
+            });
           </script>
           <!--
           <h5>Card content- says one of the two based on the tab chosen:</h5>
@@ -51,3 +119,105 @@
     <% } %>
   <% } %>
 </div>
+<script>
+  var show_flights = function (elIndex) {
+    $(`#hotels_${elIndex}`).addClass('d-none')
+    $(`#flights_${elIndex}`).removeClass('d-none')
+    $(`#nav_hotels_${elIndex}`).removeClass('active');
+    $(`#nav_flights_${elIndex}`).addClass('active');
+  }
+  var show_hotels = function (elIndex) {
+    $(`#flights_${elIndex}`).addClass('d-none')
+    $(`#hotels_${elIndex}`).removeClass('d-none')
+    $(`#nav_flights_${elIndex}`).removeClass('active');
+    $(`#nav_hotels_${elIndex}`).addClass('active');
+  }
+  var fill_flight_info = function (elIndex, action) {
+    /* use prev/next information in results array */
+    var results = flight_info[elIndex]['data'];
+    switch (action) {
+      case null:
+        $(`#flight_spinner_${elIndex}`).addClass('d-none');
+        break;
+      case 'prev':
+        if (flight_info[elIndex]['page'] <= 0) {
+          console.log('already on first el');
+          return;
+        }
+        flight_info[elIndex]['page']--;
+        break;
+      case 'next':
+        if (flight_info[elIndex]['page'] >= results.length-1) {
+          console.log('already on last el');
+          return;
+        }
+        flight_info[elIndex]['page']++;
+        break;
+      default:
+        console.log('invalid action');
+    }
+    
+    $(`#flight_body_${elIndex}`).html('');
+
+
+    /* use results object to fill in all divs */
+    var page = flight_info[elIndex]['page']
+    var itineraries = results[page]['itineraries'][0];
+    var fare = results[page]['fare'];
+
+    var layover = false;
+    var origin, destination;
+    if (itineraries.outbound.flights.length > 1) {
+      layover = true;
+    } else {
+      origin = itineraries.outbound.flights[0].origin;
+      destination = itineraries.outbound.flights[0].destination;
+      $(`#flight_${elIndex}_header`).text(`Flight from ${origin.airport} to ${destination.airport}`);
+      add_flight_body(elIndex, itineraries.outbound.flights[0], 0)
+    }
+
+    if (layover) {
+      var flights = itineraries.outbound.flights;
+      for (var i = 0; i < flights.length; i++) {
+        console.log('here');
+        var flight = itineraries.outbound.flights[i];
+        add_flight_body(elIndex, flight, i);
+      }
+    }
+
+    // fill in fare_body
+
+
+    $(`#flight_data_${elIndex}`).removeClass('d-none');
+  }
+
+  var add_flight_body = function (elIndex, flight, flightNo) {
+    var origin = flight.origin;
+    var destination = flight.destination;
+    
+    if (!origin.terminal) {
+      origin.terminal = 'TBA';
+    }
+
+    if (!destination.terminal) {
+      destination.terminal = 'TBA';
+    }
+
+    var innerHtml = `<%- include("./flight.ejs") %>`;
+
+    var flightElement = document.createElement('div');
+    $(flightElement).attr('id', `flight_div_${elIndex}_${flightNo}`);
+    
+    // fill in items
+    $(flightElement).html(innerHtml);
+    $(`#flight_body_${elIndex}`).append(flightElement)
+
+    $(`#flight_div_${elIndex}_${flightNo} [name="flightHeader"]`).text(`Flight from ${origin.airport} to ${destination.airport}`);
+    $(`#flight_div_${elIndex}_${flightNo} [name="flightNumber"]`).text(`Flight Number: ${flight.flight_number}`);
+    $(`#flight_div_${elIndex}_${flightNo} [name="origin"]`).text(`${origin.airport}, Terminal ${origin.terminal}: ${moment(flight.departs_at).tz('America/New_York').format('h:mma z')}`);
+    $(`#flight_div_${elIndex}_${flightNo} [name="destination"]`).text(`${destination.airport}, Terminal ${destination.terminal}: ${moment(flight.arrives_at).tz('America/New_York').format('h:mma z')}`);
+    $(`#flight_div_${elIndex}_${flightNo} [name="travelClass"]`).text(`${flight.booking_info.travel_class}`);
+    $(`#flight_div_${elIndex}_${flightNo} [name="seatsRem"]`).text(`${flight.booking_info.seats_remaining}`);
+    
+  }
+</script>

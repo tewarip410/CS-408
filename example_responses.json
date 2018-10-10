@@ -1,0 +1,48 @@
+flight_api_call:
+[  
+   {  
+      "itineraries":[  
+         {  
+            "outbound":{  
+               "duration":"04:52",
+               "flights":[  
+                  {  
+                     "departs_at":"2018-10-10T09:00",
+                     "arrives_at":"2018-10-10T12:18",
+                     "origin":{  
+                        "airport":"ORD",
+                        "terminal":"3"
+                     },
+                     "destination":{  
+                        "airport":"BOS",
+                        "terminal":"C"
+                     },
+                     "marketing_airline":"B6",
+                     "operating_airline":"B6",
+                     "flight_number":"1012",
+                     "aircraft":"E90",
+                     "booking_info":{  
+                        "travel_class":"ECONOMY",
+                        "booking_code":"R",
+                        "seats_remaining":7
+                     }
+                  },
+                  {  }
+               ]
+            }
+         },
+         {  }
+      ],
+      "fare":{  
+         "total_price":"382.80",
+         "price_per_adult":{  
+            "total_fare":"382.80",
+            "tax":"47.91"
+         },
+         "restrictions":{  
+            "refundable":false,
+            "change_penalties":true
+         }
+      }
+   },
+]

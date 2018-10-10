@@ -20,6 +20,7 @@ const location = Schema({
     min: -90.0,
     max: 90.0
   },
+  departureDate: String,
   duration: {
     type: Number,
     min: 0

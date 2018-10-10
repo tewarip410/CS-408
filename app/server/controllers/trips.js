@@ -1,6 +1,8 @@
 const request = require('request');
 const moment = require('moment');
 const Trip = require('../models/trip');
+const AMADEUS_API = process.env.AMADEUS_API;
+console.log(AMADEUS_API);
 
 module.exports = {
   //
@@ -76,6 +78,8 @@ module.exports = {
       roundTrip = true;
     }
 
+    // TODO serialize
+    runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
       for (var j = 0; j < location_data.length; j++) {
         if (order[i] === location_data[j][0]) {
@@ -84,8 +88,10 @@ module.exports = {
             x: location_data[j][2],
             y: location_data[j][1],
             duration: duration[i],
-            transportation: req.body['exampleRadios ' + location_data[j][3]]
+            transportation: req.body['exampleRadios ' + location_data[j][3]],
+            departureDate: runningDate.format('YYYY-MM-DD')
           });
+          runningDate.add(duration[i], 'days');
         }
       }
     }
@@ -230,12 +236,15 @@ module.exports = {
   },
   transportationGet: async (req, res) => {
     const {tripId} = req.params;
-    const {index} = req.query;
-    console.log(index);
+    const index = await Number(req.query.index);
+    const {type} = req.query;
+
+    console.log('index: '+ index);
 
     if (!tripId) { return res.json({error: 'Invalid trip ID.'}); }
-    if (!index) { return res.json({error: 'Invalid location index.'}); }
-    
+    if (isNaN(index)) { return res.json({error: 'Invalid location index.'}); }
+    if (!type) { return res.json({error: 'No type...'}); }
+
     let trip;
     try {
       trip = await Trip.findById(tripId);
@@ -245,8 +254,19 @@ module.exports = {
       return res.redirect('/');
     }
 
-    if (Number(index) === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
+    if (index === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
 
+
+    switch (type) {
+      case 'flight':
+        const flights = await getFlights(trip, index);
+        if (flights) { return res.json(flights); }
+        else { return res.json({ error: 'Error retrieving flights' }); }
+      case 'hotel':
+        return await getHotels(trip, index);
+      default:
+        return res.json({error: 'Invalid type...'});
+    }
     //const apCodes = await getAirportCodes(trip.locations.length, trip.locations);
     //const trip_data = await makeTripData(apCodes, trip);
     //const flight_data = await getFlights(trip_data, trip.trpriority, trip.num_people);
@@ -279,7 +299,76 @@ function call_api(api_call, return_info) {
   });
 }
 
-async function getAirportCodes(length, locationData) {
+async function getFlights(trip, index) {
+  /*  input check */
+  if (!trip) {
+    console.log('No trip...');
+    return false;
+  }
+  if (isNaN(index) || trip.locations.length <= 1) {
+    console.log('Index NaN or trip length too small.');
+    return false;
+  }
+
+  await console.log(trip.locations[index]);
+  await console.log(index+1);
+  await console.log(trip.locations[index+1]);
+  await console.log(`index: ${index}`)
+  const lon1 = trip.locations[index].x;
+  const lat1 = trip.locations[index].y;
+  const lon2 = trip.locations[index+1].x;
+  const lat2 = trip.locations[index+1].y;
+  
+  try {
+    /*  get airport code to use in flight search
+   *  probably should just store the airport codes  */
+
+    const ap1 = await getAirportCode(lat1, lon1);
+    const ap2 = await getAirportCode(lat2, lon2);
+  
+    /*  get flights using airport code  */
+    const flights = await callFlightsApi(ap1, ap2, index, trip);
+    
+    return flights;
+  
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+
+}
+
+async function getAirportCode(lat, lon) {
+  const api_call = `https://api.sandbox.amadeus.com/v1.2/airports/nearest-relevant?apikey=${AMADEUS_API}&latitude=${lat}&longitude=${lon}`;
+  try {
+    const apCode = await call_api(api_call, 1);
+    return apCode;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
+async function callFlightsApi(ap1, ap2, index, trip) {
+  const {trpriority} = trip;
+  const {num_people} = trip;
+  const date = trip.locations[index]['departureDate'];
+
+  let api_call = `https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=${AMADEUS_API}&origin=${ap1}&destination=${ap2}&departure_date=${date}&number_of_results=5`;
+  if (trpriority === 'te') {
+    api_call += '&nonstop=true';
+  }
+  api_call += `&adults=${num_people}`;
+  let flights;
+  try {
+    flights = await call_api(api_call, 2);
+    return flights;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+  /*
   const promises = [];
   for (var i = 0; i < length; i++) {
     const lat = locationData[i].y;
@@ -294,8 +383,7 @@ async function getAirportCodes(length, locationData) {
   } catch (e) {
     console.log(e);
     return false;
-  }
-}
+  }*/
 
 async function makeTripData(apCodes, trip) {
   let data = [];
@@ -337,6 +425,7 @@ async function makeTripData(apCodes, trip) {
   return data;
 }
 
+/*
 async function getFlights(trip_data, efficiency, numPeople) {
   const trip_promises = [];
   for (var i = 0; i < trip_data.length; i++) {
@@ -367,6 +456,7 @@ async function getFlights(trip_data, efficiency, numPeople) {
     return false;
   }
 }
+*/
 
 async function getHotels(trip_data) {
   const hotel_promises = [];
