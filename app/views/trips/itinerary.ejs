@@ -12,8 +12,10 @@
 </style>
 <div class="container mt-3">
   <% if (locals.trip) { %>
-    <h3>Trip name: <%= trip.name %></h3>
-    <h3 id="startDate">Start date: <%= trip.start_date %></h3>
+    <div class="text-center">
+        <h3>Trip name: <%= trip.name %></h3>
+        <h3 id="startDate">Start date: <%= trip.start_date %></h3>
+    </div>
     <script>
       var flight_info = [];
       $(function() {
@@ -187,6 +189,15 @@
 
     // fill in fare_body
 
+    var flightFare = document.createElement('div');
+    $(flightFare).addClass('row');
+    $(flightFare).html(`
+      <p class="col-6 font-weight-bold">Cost/person</p>
+      <p class="col-6 font-weight-bold">Total cost</p>
+      <p class="col-6">$${fare.price_per_adult.total_fare}</p>
+      <p class="col-6">$${fare.total_price}</p>
+    `);
+    $(`#flight_body_${elIndex}`).append(flightFare);
 
     $(`#flight_data_${elIndex}`).removeClass('d-none');
   }
@@ -206,6 +217,7 @@
     var innerHtml = `<%- include("./flight.ejs") %>`;
 
     var flightElement = document.createElement('div');
+
     $(flightElement).attr('id', `flight_div_${elIndex}_${flightNo}`);
     
     // fill in items
@@ -218,6 +230,7 @@
     $(`#flight_div_${elIndex}_${flightNo} [name="destination"]`).text(`${destination.airport}, Terminal ${destination.terminal}: ${moment(flight.arrives_at).tz('America/New_York').format('h:mma z')}`);
     $(`#flight_div_${elIndex}_${flightNo} [name="travelClass"]`).text(`${flight.booking_info.travel_class}`);
     $(`#flight_div_${elIndex}_${flightNo} [name="seatsRem"]`).text(`${flight.booking_info.seats_remaining}`);
+    
     
   }
 </script>
