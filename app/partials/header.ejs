@@ -8,7 +8,7 @@
                 <a class="nav-link" href="/trips/create">Trip Planner</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/trips/create">Trips</a>
+              <a class="nav-link" href="/profiles/trips">Trips</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/trips/tourist-map">Tourist Attractions</a>
@@ -32,6 +32,14 @@
   <% if (locals.messages && messages.error) { %>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
       <%=messages.error%>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% } %>
+  <% if (locals.messages && messages.success) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%=messages.success%>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>

@@ -13,4 +13,7 @@ router.post('/create/details', authController.ensureAuthenticated, tripControlle
 // TODO access control for trips (in authController)
 router.get('/:tripId', authController.ensureAuthenticated, tripController.tripGet);
 router.get('/:tripId/transportation', authController.ensureAuthenticated, tripController.transportationGet);
+router.delete('/:tripId', authController.ensureAuthenticated, tripController.tripDelete);
+
+
 module.exports = router;

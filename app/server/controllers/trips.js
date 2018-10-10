@@ -52,14 +52,15 @@ module.exports = {
       });
   },
   //
-  // POST /
+  // POST /trips
   tripsPost: async (req, res) => {
     req.session.data = req.body;
     res.render('trips/create-map', {
       prev_locations: []
     });
   },
-
+  //
+  // POST /trips/details
   detailsPost: async (req, res) => {
     // save trip info
     var name = req.body.title;
@@ -233,6 +234,20 @@ module.exports = {
         user: req.user,
         trip
       });
+  },
+  tripDelete: async (req, res) => {
+    const {tripId} = req.params;
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+      await trip.remove();
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Sorry, we could not delete that trip.');
+      return res.redirect('/');
+    }
+    req.flash('success', `We removed your trip named ${trip.name}`);
+    res.redirect('/profiles/trips');
   },
   transportationGet: async (req, res) => {
     const {tripId} = req.params;
