@@ -76,7 +76,7 @@ module.exports = {
 
     // TODO serialize
 
-    let trip_duration;
+    var trip_duration = 0;
 
     runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
@@ -93,7 +93,10 @@ module.exports = {
           runningDate.add(duration[i], 'days');
         }
       }
-      trip_duration += locations[i].duration;
+
+      if (locations[i].duration && !isNaN(locations[i].duration)) {
+        trip_duration += parseInt(locations[i].duration);
+      }
     }
 
     let trip;
