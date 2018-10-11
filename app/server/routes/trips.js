@@ -14,6 +14,6 @@ router.post('/create/details', authController.ensureAuthenticated, tripControlle
 router.get('/:tripId', authController.ensureAuthenticated, tripController.tripGet);
 router.get('/:tripId/transportation', authController.ensureAuthenticated, tripController.transportationGet);
 router.delete('/:tripId', authController.ensureAuthenticated, tripController.tripDelete);
-
+router.get('ideas', authController.ensureAuthenticated, tripController.tripIdeasGet);
 
 module.exports = router;
