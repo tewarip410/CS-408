@@ -143,7 +143,7 @@ module.exports = {
 
     const trip_data = await makeTripData(req, apCodes, location_data, date);
     // console.log(trip_data);
-    
+
     queryStart = new Date();
     const [flights, hotels] = await Promise.all([
       getFlights(trip_data, efficiency),
@@ -225,7 +225,7 @@ module.exports = {
       req.flash('error', 'Invalid trip ID.');
       return res.redirect('/');
     }
-    
+
     let trip;
     try {
       trip = await Trip.findById(tripId);
@@ -307,7 +307,7 @@ function call_api(api_call, return_info) {
       //console.log(return_info);
       var json = JSON.parse(body);
       if (return_info === 1 && !json.length) {
-        return reject('Nothing found!');   
+        return reject('Nothing found!');
       }
       if (return_info === 1) { //return airport code
         return resolve(json[0].airport);
@@ -341,19 +341,19 @@ async function getFlights(trip, index) {
   const lat1 = trip.locations[index].y;
   const lon2 = trip.locations[index+1].x;
   const lat2 = trip.locations[index+1].y;
-  
+
   try {
     /*  get airport code to use in flight search
    *  probably should just store the airport codes  */
 
     const ap1 = await getAirportCode(lat1, lon1);
     const ap2 = await getAirportCode(lat2, lon2);
-  
+
     /*  get flights using airport code  */
     const flights = await callFlightsApi(ap1, ap2, index, trip);
-    
+
     return flights;
-  
+
   } catch (e) {
     console.log(e);
     return false;
