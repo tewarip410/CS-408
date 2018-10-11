@@ -65,7 +65,6 @@ module.exports = {
     // save trip info
     var name = req.body.title;
     const {date} = req.body;
-    var roundTrip = false;
     var optradio = req.body.optradio;
     const {duration} = req.body;
     var numPeople = req.body.numPeople;
@@ -74,10 +73,6 @@ module.exports = {
     const locations = [];
     const order = JSON.parse(req.body.order);
     const nLocations = order.length;
-
-    if (req.body.roundTrip === 'on') {
-      roundTrip = true;
-    }
 
     // TODO serialize
     runningDate = new moment(date).utc();
@@ -104,7 +99,6 @@ module.exports = {
         start_date: date,
         _userId: user._id,
         trpriority: optradio,
-        roundtrip: roundTrip,
         num_people: numPeople,
         locations,
         favorite: false
