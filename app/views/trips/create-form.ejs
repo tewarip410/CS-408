@@ -13,9 +13,11 @@
         <input type="hidden" id="order" name="order" value="" />
         <br>
         <div class="container">
-            <div class="row justify-content-between">
-            <br>
-            <div class="card w-75 p-3 col-6" style="width: 21.5em; margin:0 auto;">
+          <div class="card-columns">
+            <div class="card p-3">
+                <div class="card-header">
+                  <h4>Trip Start</h4>
+                </div>
                 <div class="drag-list">
                     <% var i = 0; %>
                     <% data.location_data.forEach((obj) => { %>
@@ -66,45 +68,38 @@
                     <% i++; %>
                     <% }) %>
                 </div>
+                <br>
+                <div class="card-footer">
+                  <h4>Trip End</h4>
+                </div>
             </div>
-            <br>
-            <div class="card w-75 p-3 col-5" style="height: 25em; margin:0 auto;">
-                <span class="form-inline">
-                    <div class="mx-auto form-inline pt-4"><input class="form-control text-center" type="text" id="title" name="title"
-                            placeholder="Enter the name of your trip" style="width: 25rem; height: 2.5rem;"></div>
-                </span>
-                <br>
-                <span class="form-inline" style="padding-top: 1rem">
-                    <br>
-                    <div class="mx-auto form-inline"><label class="pr-3" for="datepicker">Start date</label>
-                        <input name="date" id="datepicker" width="276" /></div>
-
-                </span>
-                <br>
-                <div class="form-group" style="padding-top: 1rem">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="rt" id="gridCheck">
-                        <label class="form-check-label">
-                            Round Trip?
-                        </label>
-                    </div>
+            <div class="card p-3">
+                <div class="form-group mt-3">
+                  <label for="title">Trip name</label>
+                    <input class="form-control text-center" type="text" id="title" name="title"
+                      placeholder="e.g. Chicago to New York">
+                </div>
+                <div class="form-group mt-1">
+                  <label for="datepicker">Start date</label>
+                  <input class="text-center" name="date" id="datepicker" />
+                </div>
+                <div class="form-group">
+                  <label>Trip Efficiency</label>
+                  <br>
+                  <div class="form-check form-check-inline mt-1">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cheapest
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Fastest
+                    </label>
+                  </div>
                 </div>
 
-                <span>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" id="1" value="ce" checked>Cheapest
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline pb-4">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optradio" id="2" value="te">Fastest
-                        </label>
-                    </div>
-                </span>
-
-                <div class="form-group">
-                    <label for="exampleSelect1">Select number of people traveling</label>
+                <div class="form-group mt-2">
+                    <label for="exampleSelect1">Number of people traveling</label>
                     <select class="form-control" id="select" name="numPeople">
                       <option>1</option>
                       <option>2</option>
@@ -126,7 +121,7 @@
                         </div>
                 </div>
             </div>
-            </div>
+          </div>
     </div>
     </form>
     <% } %>
