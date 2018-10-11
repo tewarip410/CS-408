@@ -211,6 +211,15 @@ module.exports = {
         user: req.user
       });*/
   },
+  tripIdeasGet: async (req, res) => {
+    res.render('forms/create-form-layout',
+    {
+      page: 'trip-ideas.ejs',
+      title: `${trip.name} Itinerary • Adventum`,
+      user: req.user,
+      trip
+    });
+  },
   tripGet: async (req, res) => {
     const {tripId} = req.params;
     if (!tripId) {
@@ -230,9 +239,8 @@ module.exports = {
     res.render('forms/create-form-layout',
       {
         page: 'itinerary.ejs',
-        title: `${trip.name} Itinerary • Adventum`,
-        user: req.user,
-        trip
+        title: `TrîPP¥ IdEAs | • Adventum`,
+        user: req.user
       });
   },
   tripDelete: async (req, res) => {
