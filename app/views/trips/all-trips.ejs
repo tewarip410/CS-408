@@ -43,13 +43,15 @@
       <div class="card-header">
         <h4 class="d-flex">
           <div class="mr-auto p-2">Name: <%=trip.name%>, Start Date: <%=trip.start_date_str%>, Total Days: <%=trip.total_duration%></div>
-          <form class="p-2" action="/trips/<%=trip._id%>-favorite" method="post">
             <% if (trip.favorite === true) { %>
-              <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star mr-1"></i></button>
+              <form class="p-2" action="/trips/<%=trip._id%>-unfavorite" method="post">
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star mr-1"></i></button>
+              </form>
             <% } else { %>
-              <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star-o mr-1"></i></button>
+              <form class="p-2" action="/trips/<%=trip._id%>-favorite" method="post">
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star-o mr-1"></i></button>
+              </form>
             <% } %>
-          </form>
           <form class="p-2" action="/trips/<%=trip._id%>?_method=delete" method="post" style="padding-right: 0rem">
             <button type="submit" class="btn danger-color-dark btn-sm"><i class="fa fa-trash mr-1"></i></button>
           </form>
