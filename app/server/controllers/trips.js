@@ -77,7 +77,7 @@ module.exports = {
     // TODO serialize
 
     let trip_duration;
-    
+
     runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
       for (var j = 0; j < location_data.length; j++) {
