@@ -14,7 +14,7 @@
   <% if (locals.trip) { %>
     <div class="text-center">
         <h3>Trip name: <%= trip.name %></h3>
-        <h3 id="startDate">Start date: <%= trip.start_date %></h3>
+        <h3 id="startDate"></h3>
     </div>
     <script>
       var flight_info = [];
@@ -158,7 +158,7 @@
       default:
         console.log('invalid action');
     }
-    
+
     $(`#flight_body_${elIndex}`).html('');
 
 
@@ -205,7 +205,7 @@
   var add_flight_body = function (elIndex, flight, flightNo) {
     var origin = flight.origin;
     var destination = flight.destination;
-    
+
     if (!origin.terminal) {
       origin.terminal = 'TBA';
     }
@@ -219,7 +219,7 @@
     var flightElement = document.createElement('div');
 
     $(flightElement).attr('id', `flight_div_${elIndex}_${flightNo}`);
-    
+
     // fill in items
     $(flightElement).html(innerHtml);
     $(`#flight_body_${elIndex}`).append(flightElement)
@@ -230,7 +230,7 @@
     $(`#flight_div_${elIndex}_${flightNo} [name="destination"]`).text(`${destination.airport}, Terminal ${destination.terminal}: ${moment(flight.arrives_at).tz('America/New_York').format('h:mma z')}`);
     $(`#flight_div_${elIndex}_${flightNo} [name="travelClass"]`).text(`${flight.booking_info.travel_class}`);
     $(`#flight_div_${elIndex}_${flightNo} [name="seatsRem"]`).text(`${flight.booking_info.seats_remaining}`);
-    
-    
+
+
   }
 </script>
