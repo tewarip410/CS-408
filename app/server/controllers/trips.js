@@ -78,6 +78,7 @@ module.exports = {
     if (req.body.roundTrip === 'on') {
       roundTrip = true;
     }
+    let trip_duration;
 
     // TODO serialize
     runningDate = new moment(date).utc();
@@ -95,13 +96,17 @@ module.exports = {
           runningDate.add(duration[i], 'days');
         }
       }
+      trip_duration += locations[i].duration;
     }
 
     let trip;
+
     try {
       trip = await Trip.create({
         name: name,
         start_date: date,
+        start_date_str: moment(date).format("MMM DD, YYYY"),
+        total_duration: trip_duration,
         _userId: user._id,
         trpriority: optradio,
         roundtrip: roundTrip,

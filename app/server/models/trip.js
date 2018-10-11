@@ -7,7 +7,7 @@ const { Schema } = mongoose;
  * x: longitude (longitude first is the standard;
  *    x instead of lon because mongo automatically sorts by alpha)
  * y: latitude
- */ 
+ */
 const location = Schema({
   name: String,
   x: {
@@ -31,6 +31,8 @@ const location = Schema({
 const tripSchema = Schema({
   name: String,
   start_date: Date,
+  start_date_str: String,
+  total_duration: Number,
   _userId: Schema.Types.ObjectId,
   trpriority: String,
   roundtrip: Boolean,

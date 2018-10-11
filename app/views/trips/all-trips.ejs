@@ -13,7 +13,7 @@
     <div class="card mt-3">
       <div class="card-header">
         <h4 class="d-flex">
-          <%=trip.name%>
+          <%=trip.name%>  <%=trip.start_date_str%> <%=trip.total_duration=%>
           <form class="ml-auto" action="/trips/<%=trip._id%>?_method=delete" method="post">
             <button type="submit" class="btn danger-color-dark btn-sm"><i class="fa fa-trash mr-1"></i></button>
           </form>
