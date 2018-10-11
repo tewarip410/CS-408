@@ -106,7 +106,8 @@ module.exports = {
         trpriority: optradio,
         roundtrip: roundTrip,
         num_people: numPeople,
-        locations
+        locations,
+        favorite: false
       });
     } catch (e) {
       console.log(e);
@@ -255,6 +256,36 @@ module.exports = {
       return res.redirect('/');
     }
     req.flash('success', `We removed your trip named ${trip.name}`);
+    res.redirect('/profiles/trips');
+  },
+  tripFavorite: async(req, res) => {
+    const {tripId} = req.params;
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+      await trip.updateOne({favorite: true});
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Sorry, favoriting the trip failed.');
+      return res.redirect('/');
+    }
+
+    req.flash('success', `Your trip named ${trip.name} has been favorited!`);
+    res.redirect('/profiles/trips');
+  },
+  tripUnFavorite: async(req, res) => {
+    const {tripId} = req.params;
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+      await trip.updateOne({favorite: false});
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Sorry, favoriting the trip failed.');
+      return res.redirect('/');
+    }
+
+    req.flash('success', `Your trip named ${trip.name} has been unfavorited.`);
     res.redirect('/profiles/trips');
   },
   transportationGet: async (req, res) => {
