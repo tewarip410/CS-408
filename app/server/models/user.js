@@ -20,7 +20,7 @@ userSchema.statics.findOrCreate = async (profile, callback) => {
       return callback(null, user);
     }
     // need _json for some reason... idk google is weird :(
-    user = await User.create({ 
+    user = await User.create({
       email: profile.emails[0].value,
       googleId: profile.id,
       name: profile.displayName,

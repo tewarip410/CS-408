@@ -13,7 +13,7 @@
 <div class="container mt-3">
   <% if (locals.trip) { %>
     <div class="text-center">
-        <h3>Trip name: <%= trip.name %></h3>
+        <h3>Trip: <%= trip.name %></h3>
         <h3 id="startDate"></h3>
     </div>
     <script>
@@ -25,7 +25,7 @@
     <% for (var i = 0; i < trip.locations.length; i++) { %>
       <div class="card my-3">
         <div class="card-header">
-          <h4><%= trip.locations[i]['name'] %></h4>
+          <h4><%= trip.locations[i]['name'] %>  <%= trip.locations[i]['name'] %></h4>
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
               <p class="nav-link active" id="nav_flights_<%=i%>" onclick="show_flights(Number('<%=i%>'))">Flights</p>

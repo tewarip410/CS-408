@@ -65,7 +65,6 @@ module.exports = {
     // save trip info
     var name = req.body.title;
     const {date} = req.body;
-    var roundTrip = false;
     var optradio = req.body.optradio;
     const {duration} = req.body;
     var numPeople = req.body.numPeople;
@@ -75,11 +74,10 @@ module.exports = {
     const order = JSON.parse(req.body.order);
     const nLocations = order.length;
 
-    if (req.body.roundTrip === 'on') {
-      roundTrip = true;
-    }
-
     // TODO serialize
+
+    let trip_duration;
+
     runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
       for (var j = 0; j < location_data.length; j++) {
@@ -95,16 +93,19 @@ module.exports = {
           runningDate.add(duration[i], 'days');
         }
       }
+      trip_duration += locations[i].duration;
     }
 
     let trip;
+
     try {
       trip = await Trip.create({
         name: name,
         start_date: date,
+        start_date_str: moment(date).format("MMM DD, YYYY"),
+        total_duration: trip_duration,
         _userId: user._id,
         trpriority: optradio,
-        roundtrip: roundTrip,
         num_people: numPeople,
         locations,
         favorite: false
