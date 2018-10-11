@@ -215,9 +215,8 @@ module.exports = {
     res.render('forms/create-form-layout',
     {
       page: 'trip-ideas.ejs',
-      title: `${trip.name} Itinerary • Adventum`,
-      user: req.user,
-      trip
+      title: `Trip Ideas • Adventum`,
+      user: req.user
     });
   },
   tripGet: async (req, res) => {
@@ -239,8 +238,9 @@ module.exports = {
     res.render('forms/create-form-layout',
       {
         page: 'itinerary.ejs',
-        title: `TrîPP¥ IdEAs | • Adventum`,
-        user: req.user
+        title: `${trip.name} Itinerary • Adventum`,
+        user: req.user,
+        trip
       });
   },
   tripDelete: async (req, res) => {
