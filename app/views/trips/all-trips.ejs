@@ -14,11 +14,11 @@
             aria-haspopup="true" aria-expanded="false">Sort</button>
           <!--Menu-->
           <div class="dropdown-menu dropdown-primary">
-              <a class="dropdown-item" href="#">Alphabetical (A-Z)</a>
-              <a class="dropdown-item" href="#">Alphabetical (Z-A)</a>
-              <a class="dropdown-item" href="#">Favorites</a>
-              <a class="dropdown-item" href="#">Date created (newest first)</a>
-              <a class="dropdown-item" href="#">Date created (oldest first)</a>
+              <a class="dropdown-item" href="?return=al_inc">Alphabetical (A-Z)</a>
+              <a class="dropdown-item" href="?return=al_dec">Alphabetical (Z-A)</a>
+              <a class="dropdown-item" href="?return=favorite">Favorites</a>
+              <a class="dropdown-item" href="?return=closest">Start Date (closest first)</a>
+              <a class="dropdown-item" href="?return=furthest">Start Date (furthest away first)</a>
           </div>
         </div>
         
@@ -28,16 +28,13 @@
             aria-haspopup="true" aria-expanded="false">Filter</button>
           <!--Menu-->
           <div class="dropdown-menu dropdown-primary">
-              <a class="dropdown-item" href="#">Show future trips</a>
-              <a class="dropdown-item" href="#">Show all trips</a>
-              <a class="dropdown-item" href="#">Show previous trips</a>
+              <a class="dropdown-item" href="?return=future">Show future trips</a>
+              <a class="dropdown-item" href="?return=all">Show all trips</a>
+              <a class="dropdown-item" href="?return=previous">Show previous trips</a>
           </div>
         </div>
   </div>
- 
 
-      
-    
   <% trips.forEach(trip => { %>
     <div class="card mt-3">
       <div class="card-header">
