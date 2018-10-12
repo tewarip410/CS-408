@@ -21,41 +21,62 @@
                 <div class="drag-list">
                     <% var i = 0; %>
                     <% data.location_data.forEach((obj) => { %>
-                    <div class="drag-item">
+                    <div class="drag-item" id="<%- obj[0] %>-item">
                         <!-- Don't put anything above this form-group, it will mess up how the order is made! -->
                         <div class="form-group pt-2">
                             <label class="h5" text="place_name">
                                 <%- obj[0] %></label>
                             <span class="form-inline">
                                 <i class="fa fa-sort mr-1" aria-hidden="true"></i>
-                                <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
+                                <% if (i === 0) { %>
+                                    <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
+                                        name="duration" id="<%- obj[0] %>-stay" disabled>
+                                    </div>
+                                <% } else { %>
+                                    <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
                                         name="duration" id="<%- obj[0] %>-stay">
-                                        </div>
+                                    </div>
+                                <% } %>
                             </span>
                         </div>
 
                         <span class="form-check form-check-inline pb-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
+                                <% if (i === 0) { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1" disabled>
+                                <% } else { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="plane" id="<%- obj[0] %>-r1">
+                                <% } %>
                                 <label class="form-check-label">
                                     Plane
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
+                                <% if (i === 0) { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2" disabled>
+                                <% } else { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="train" id="<%- obj[0] %>-r2">
+                                <% } %>
                                 <label class="form-check-label">
                                     Train
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
+                                <% if (i === 0) { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3" disabled>
+                                <% } else { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="car" id="<%- obj[0] %>-r3">
+                                <% } %>
                                 <label class="form-check-label">
                                     Car
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4"
-                                    checked>
+                                <% if (i === 0) { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4" disabled>
+                                <% } else { %>
+                                    <input class="form-check-input" type="radio" name="exampleRadios <%= i %>" value="none" id="<%- obj[0] %>-r4" checked>
+                                <% } %>
                                 <label class="form-check-label">
                                     Other
                                 </label>
@@ -166,28 +187,42 @@
         },
         stop: function (e, ui) {
             $(".slide-placeholder-animator").remove();
+            var $list = $(".drag-list");
+            var listElements = $list.children();
+            for (var i = 0; i < listElements.length; i++) {
+                var element = listElements[i].firstElementChild.firstElementChild;
+                var id = (element.innerHTML).trim();
+
+                if (i == 0) {
+                    $(document.getElementById(id + "-stay")).prop( "disabled", true );
+                    $(document.getElementById(id + "-stay")).val('');
+                    $(document.getElementById(id + "-r1")).prop( "disabled", true );
+                    $(document.getElementById(id + "-r2")).prop( "disabled", true );
+                    $(document.getElementById(id + "-r3")).prop( "disabled", true );
+                    $(document.getElementById(id + "-r4")).prop( "disabled", true );
+                }
+                else {
+                    $(document.getElementById(id + "-stay")).prop( "disabled", false );
+                    $(document.getElementById(id + "-r1")).prop( "disabled", false );
+                    $(document.getElementById(id + "-r2")).prop( "disabled", false );
+                    $(document.getElementById(id + "-r3")).prop( "disabled", false );
+                    $(document.getElementById(id + "-r4")).prop( "disabled", false );
+                }
+            }
         },
     });
 </script>
 
 <script>
     function toggleDisabled(id) {
-        if ($(document.getElementById(id + "-stay")).prop( "disabled") === false) {
-            $(document.getElementById(id + "-stay")).prop( "disabled", true );
+        if ($(document.getElementById(id + "-removed")).val() === "false" || $(document.getElementById(id + "-removed")).val() === "") {
             $(document.getElementById(id + "-stay")).val('');
             $(document.getElementById(id + "-removed")).val("true");
-            $(document.getElementById(id + "-r1")).prop( "disabled", true );
-            $(document.getElementById(id + "-r2")).prop( "disabled", true );
-            $(document.getElementById(id + "-r3")).prop( "disabled", true );
-            $(document.getElementById(id + "-r4")).prop( "disabled", true );
+            $(document.getElementById(id + "-item")).css("background-color", "red");
         }
         else {
-            $(document.getElementById(id + "-stay")).prop( "disabled", false );
             $(document.getElementById(id + "-removed")).val("false");
-            $(document.getElementById(id + "-r1")).prop( "disabled", false );
-            $(document.getElementById(id + "-r2")).prop( "disabled", false );
-            $(document.getElementById(id + "-r3")).prop( "disabled", false );
-            $(document.getElementById(id + "-r4")).prop( "disabled", false );
+            $(document.getElementById(id + "-item")).css("background-color", "#ecf0f1");
         }
     }
 
@@ -205,6 +240,9 @@
             var removed = $(document.getElementById(name + "-removed")).val();
             if (removed === 'false') {
                 order.push(name);
+            }
+            else {
+                $(document.getElementById(name + "-stay")).prop( "disabled", true );
             }
         }
         $('#travel_form > input').val(JSON.stringify(order));
