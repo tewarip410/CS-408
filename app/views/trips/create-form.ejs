@@ -30,7 +30,7 @@
                                 <i class="fa fa-sort mr-1" aria-hidden="true"></i>
                                 <% if (i === 0) { %>
                                     <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
-                                        name="duration" id="<%- obj[0] %>-stay" disabled>
+                                        name="duration" id="<%- obj[0] %>-stay" value="0" readonly>
                                     </div>
                                 <% } else { %>
                                     <div class="mx-auto form-inline pt-2"><input type="text" placeholder="Duration of stay" class="form-control mr-3 text-center"
@@ -194,15 +194,16 @@
                 var id = (element.innerHTML).trim();
 
                 if (i == 0) {
-                    $(document.getElementById(id + "-stay")).prop( "disabled", true );
-                    $(document.getElementById(id + "-stay")).val('');
+                    $(document.getElementById(id + "-stay")).prop( "readonly", true );
+                    $(document.getElementById(id + "-stay")).val(0);
                     $(document.getElementById(id + "-r1")).prop( "disabled", true );
                     $(document.getElementById(id + "-r2")).prop( "disabled", true );
                     $(document.getElementById(id + "-r3")).prop( "disabled", true );
+                    $(document.getElementById(id + "-r4")).prop( "checked", true );
                     $(document.getElementById(id + "-r4")).prop( "disabled", true );
                 }
-                else {
-                    $(document.getElementById(id + "-stay")).prop( "disabled", false );
+                else if ($(document.getElementById(id + "-removed")).val() === "false" || $(document.getElementById(id + "-removed")).val() === ""){
+                    $(document.getElementById(id + "-stay")).prop( "readonly", false );
                     $(document.getElementById(id + "-r1")).prop( "disabled", false );
                     $(document.getElementById(id + "-r2")).prop( "disabled", false );
                     $(document.getElementById(id + "-r3")).prop( "disabled", false );
@@ -217,12 +218,20 @@
     function toggleDisabled(id) {
         if ($(document.getElementById(id + "-removed")).val() === "false" || $(document.getElementById(id + "-removed")).val() === "") {
             $(document.getElementById(id + "-stay")).val('');
+            $(document.getElementById(id + "-stay")).prop( "disabled", true );
             $(document.getElementById(id + "-removed")).val("true");
-            $(document.getElementById(id + "-item")).css("background-color", "red");
+            $(document.getElementById(id + "-r1")).prop( "disabled", true );
+            $(document.getElementById(id + "-r2")).prop( "disabled", true );
+            $(document.getElementById(id + "-r3")).prop( "disabled", true );
+            $(document.getElementById(id + "-r4")).prop( "disabled", true );
         }
         else {
             $(document.getElementById(id + "-removed")).val("false");
-            $(document.getElementById(id + "-item")).css("background-color", "#ecf0f1");
+            $(document.getElementById(id + "-stay")).prop( "disabled", false );
+            $(document.getElementById(id + "-r1")).prop( "disabled", false );
+            $(document.getElementById(id + "-r2")).prop( "disabled", false );
+            $(document.getElementById(id + "-r3")).prop( "disabled", false );
+            $(document.getElementById(id + "-r4")).prop( "disabled", false );
         }
     }
 
@@ -240,9 +249,6 @@
             var removed = $(document.getElementById(name + "-removed")).val();
             if (removed === 'false') {
                 order.push(name);
-            }
-            else {
-                $(document.getElementById(name + "-stay")).prop( "disabled", true );
             }
         }
         $('#travel_form > input').val(JSON.stringify(order));
