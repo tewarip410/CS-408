@@ -11,9 +11,11 @@ router.get('/prev_map', authController.ensureAuthenticated, tripController.creat
 router.post('/', authController.ensureAuthenticated, tripController.tripsPost);
 router.post('/create/details', authController.ensureAuthenticated, tripController.detailsPost);
 // TODO access control for trips (in authController)
+router.get('/ideas', authController.ensureAuthenticated, tripController.tripIdeasGet);
 router.get('/:tripId', authController.ensureAuthenticated, tripController.tripGet);
 router.get('/:tripId/transportation', authController.ensureAuthenticated, tripController.transportationGet);
 router.delete('/:tripId', authController.ensureAuthenticated, tripController.tripDelete);
-
+router.post('/:tripId-favorite', authController.ensureAuthenticated, tripController.tripFavorite);
+router.post('/:tripId-unfavorite', authController.ensureAuthenticated, tripController.tripUnFavorite);
 
 module.exports = router;

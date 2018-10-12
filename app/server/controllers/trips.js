@@ -65,7 +65,6 @@ module.exports = {
     // save trip info
     var name = req.body.title;
     const {date} = req.body;
-    var roundTrip = false;
     var optradio = req.body.optradio;
     const {duration} = req.body;
     var numPeople = req.body.numPeople;
@@ -75,11 +74,10 @@ module.exports = {
     const order = JSON.parse(req.body.order);
     const nLocations = order.length;
 
-    if (req.body.roundTrip === 'on') {
-      roundTrip = true;
-    }
-
     // TODO serialize
+
+    var trip_duration = 0;
+
     runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
       for (var j = 0; j < location_data.length; j++) {
@@ -95,18 +93,25 @@ module.exports = {
           runningDate.add(duration[i], 'days');
         }
       }
+
+      if (locations[i].duration && !isNaN(locations[i].duration)) {
+        trip_duration += parseInt(locations[i].duration);
+      }
     }
 
     let trip;
+
     try {
       trip = await Trip.create({
         name: name,
         start_date: date,
+        start_date_str: moment(date).format("MMM DD, YYYY"),
+        total_duration: trip_duration,
         _userId: user._id,
         trpriority: optradio,
-        roundtrip: roundTrip,
         num_people: numPeople,
-        locations
+        locations,
+        favorite: false
       });
     } catch (e) {
       console.log(e);
@@ -143,7 +148,7 @@ module.exports = {
 
     const trip_data = await makeTripData(req, apCodes, location_data, date);
     // console.log(trip_data);
-    
+
     queryStart = new Date();
     const [flights, hotels] = await Promise.all([
       getFlights(trip_data, efficiency),
@@ -211,13 +216,21 @@ module.exports = {
         user: req.user
       });*/
   },
+  tripIdeasGet: async (req, res) => {
+    res.render('forms/create-form-layout',
+    {
+      page: 'trip-ideas.ejs',
+      title: `Trip Ideas • Adventum`,
+      user: req.user
+    });
+  },
   tripGet: async (req, res) => {
     const {tripId} = req.params;
     if (!tripId) {
       req.flash('error', 'Invalid trip ID.');
       return res.redirect('/');
     }
-    
+
     let trip;
     try {
       trip = await Trip.findById(tripId);
@@ -247,6 +260,36 @@ module.exports = {
       return res.redirect('/');
     }
     req.flash('success', `We removed your trip named ${trip.name}`);
+    res.redirect('/profiles/trips');
+  },
+  tripFavorite: async(req, res) => {
+    const {tripId} = req.params;
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+      await trip.updateOne({favorite: true});
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Sorry, favoriting the trip failed.');
+      return res.redirect('/');
+    }
+
+    req.flash('success', `Your trip named ${trip.name} has been favorited!`);
+    res.redirect('/profiles/trips');
+  },
+  tripUnFavorite: async(req, res) => {
+    const {tripId} = req.params;
+    let trip;
+    try {
+      trip = await Trip.findById(tripId);
+      await trip.updateOne({favorite: false});
+    } catch (e) {
+      console.log(e);
+      req.flash('error', 'Sorry, favoriting the trip failed.');
+      return res.redirect('/');
+    }
+
+    req.flash('success', `Your trip named ${trip.name} has been unfavorited.`);
     res.redirect('/profiles/trips');
   },
   transportationGet: async (req, res) => {
@@ -299,7 +342,7 @@ function call_api(api_call, return_info) {
       //console.log(return_info);
       var json = JSON.parse(body);
       if (return_info === 1 && !json.length) {
-        return reject('Nothing found!');   
+        return reject('Nothing found!');
       }
       if (return_info === 1) { //return airport code
         return resolve(json[0].airport);
@@ -333,19 +376,19 @@ async function getFlights(trip, index) {
   const lat1 = trip.locations[index].y;
   const lon2 = trip.locations[index+1].x;
   const lat2 = trip.locations[index+1].y;
-  
+
   try {
     /*  get airport code to use in flight search
    *  probably should just store the airport codes  */
 
     const ap1 = await getAirportCode(lat1, lon1);
     const ap2 = await getAirportCode(lat2, lon2);
-  
+
     /*  get flights using airport code  */
     const flights = await callFlightsApi(ap1, ap2, index, trip);
-    
+
     return flights;
-  
+
   } catch (e) {
     console.log(e);
     return false;
