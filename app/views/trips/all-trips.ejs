@@ -39,7 +39,7 @@
     <div class="card mt-3">
       <div class="card-header">
         <h4 class="d-flex">
-          <div class="mr-auto p-2">Trip: <%=trip.name%> &nbsp;&nbsp; Begin Date: <%=trip.start_date_str%>, Total Days: <%=trip.total_duration%></div>
+          <div class="mr-auto p-2">Trip: <%=trip.name%> &nbsp;| &nbsp; Begin Date: <%=trip.start_date_str%> &nbsp;| &nbsp; Total Days: <%=trip.total_duration%></div>
             <% if (trip.favorite === true) { %>
               <form class="p-2" action="/trips/<%=trip._id%>-unfavorite" method="post">
                 <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star mr-1"></i></button>
