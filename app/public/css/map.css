@@ -17,12 +17,12 @@
 
       .my-outline-primary {
         border-color: #cc9f2b;
-        color: #26225b;
+        color: #26225b !important;
         background-color: white;
       }
       .my-outline-primary:hover{
         background-color: #cc9f2b;
-        color: white;
+        color: white !important;
       }
 
       #description {

@@ -21,3 +21,7 @@
 .ui-sortable-helper {
     box-shadow: 0 3px 10px rgba(0,0,0,.1), 0 10px 30px rgba(0,0,0,.05);
 }
+
+.card-columns {
+  column-count: 2;
+}
