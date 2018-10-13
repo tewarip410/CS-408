@@ -33,6 +33,7 @@ const tripSchema = Schema({
   start_date: Date,
   start_date_str: String,
   end_date_str: String,
+  total_duration: Number,
   _userId: Schema.Types.ObjectId,
   trpriority: String,
   num_people: Number,

@@ -104,6 +104,7 @@ module.exports = {
         start_date: date,
         start_date_str: moment(date).format('MMM DD, YYYY'),
         end_date_str: moment(date).add(trip_duration, 'days').format('MMM DD, YYYY'),
+        total_duration: trip_duration,
         _userId: user._id,
         trpriority: optradio,
         num_people: numPeople,
