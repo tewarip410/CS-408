@@ -1,18 +1,55 @@
     <script>
       var locations = [];
-    </script>    
-    
+    </script>
+    <style>
+      .map-controls {
+        width: 250px;
+      }
+    </style>
+
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div class="outer-map">
       <div id="map"></div>
       <div class="btn-container">
-        <input id="latlng" type="text">
-        <input id="submit" type="button" class="btn my-outline-primary" value="Enter Coordinates">
-        <input onclick="deleteMarkers();" type=button class="btn my-outline-primary" value="Delete Markers">
-        <input onclick="submitMarkers();" type=button class="btn my-primary" value="Finish">
+        <!--  -->
+        <!-- <button id="submit" type="button" class="btn btn-outline-warning">Enter Coordinates</button> -->
+        <input id="submit" type="button" class="btn btn-primary map-controls" data-toggle="modal" data-target="#coordinatesModal" value="Enter Coordinates">
+        <input onclick="deleteMarkers();" type=button class="btn btn-primary map-controls" value="Delete All Markers">
+        <input onclick="submitMarkers();" type=button class="btn my-primary map-controls" value="Continue">
       </div>
     </div>
-    
+
+    <!-- MODAL FOR ENTER COORDINATES -->
+    <div class="modal fade" id="coordinatesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center modal-center">
+
+          <div class="modal-bottom">
+              <h3 class="mt-2 mb-5">Enter a pair of coordinates</h3>
+              <div class="row">
+                <div class="col-8 ml-3 ">
+                  <input id="latlng" class="form-control d-inline" type="text" placeholder="latitude, longitude">
+                </div>
+              </div>
+                <div class="row text-center">
+                  <div class="col-3 ml-2 w-100">
+                    <button type="button" id="addCoordBtn" class="btn btn-primary">Add</button>
+                  </div>
+                  <div class="col-3 w-100 text-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+
     <% if (locals.prev_locations && prev_locations.location_data) { %>
       <% prev_locations.location_data.forEach((obj) => { %>
         <script>
@@ -43,6 +80,10 @@
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        $('#addCoordBtn').click(function() {
+          geocodeLatLng(geocoder, map, infowindow);
+        })
 
         // This event listener will call addMarker() when the map is clicked.
         map.addListener('click', function(event) {
@@ -107,11 +148,7 @@
             }
           });
           map.fitBounds(bounds);
-        });
-
-        document.getElementById('submit').addEventListener('click', function() {
-          geocodeLatLng(geocoder, map, infowindow);
-        });
+        });ß
 
         for (var j = 0; j < locations.length; j++) {
           addPrevMarker(locations[j][0], locations[j][1], geocoder, map);
@@ -233,7 +270,7 @@
 
       function submitMarkers() {
         var location_data = [];
-        
+
         for (var i = 0; i < markers.length; i++) {
           if (markers[i] !== null) {
             var data = [markers[i].title, markers[i].position.lat(), markers[i].position.lng(), i];

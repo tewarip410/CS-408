@@ -76,7 +76,7 @@ module.exports = {
 
     // TODO serialize
 
-    let trip_duration;
+    let trip_duration = 0;
 
     runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
@@ -93,7 +93,7 @@ module.exports = {
           runningDate.add(duration[i], 'days');
         }
       }
-      trip_duration += locations[i].duration;
+      if (locations[i].duration) { trip_duration += Number(locations[i].duration); }
     }
 
     let trip;
@@ -102,8 +102,8 @@ module.exports = {
       trip = await Trip.create({
         name: name,
         start_date: date,
-        start_date_str: moment(date).format("MMM DD, YYYY"),
-        total_duration: trip_duration,
+        start_date_str: moment(date).format('MMM DD, YYYY'),
+        end_date_str: moment(date).add(trip_duration, 'days').format('MMM DD, YYYY'),
         _userId: user._id,
         trpriority: optradio,
         num_people: numPeople,

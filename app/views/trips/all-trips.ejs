@@ -41,7 +41,8 @@
       <div class="card mt-3">
         <div class="card-header">
           <h4 class="d-flex">
-            <div class="mr-auto p-2"><%=trip.name%><%=trip.start_date_str%> <%=trip.total_duration=%></div>
+            <div class="mr-auto p-2"><%=trip.name%></div>
+            <div class="d-inline mr-3"><%=trip.start_date_str%> -  <%=trip.end_date_str%></div>
             <form class="p-2" action="/trips/<%=trip._id%>-favorite" method="post">
               <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star-o mr-1"></i></button>
             </form>
