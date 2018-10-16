@@ -39,7 +39,7 @@
     <div class="card mt-3">
       <div class="card-header">
         <h4 class="d-flex">
-          <div class="mr-auto p-2">Trip: <%=trip.name%> &nbsp;| &nbsp; Begin Date: <%=trip.start_date_str%> &nbsp;| &nbsp; Total Days: <%=trip.total_duration%></div>
+          <div class="mr-auto p-2"><strong>Trip: </strong><%=trip.name%>&nbsp;&nbsp;•&nbsp;&nbsp;<strong>Begin Date: </strong><%=trip.start_date_str%>&nbsp;&nbsp;•&nbsp;&nbsp;<strong>Total Days: </strong><%=trip.total_duration%></div>
             <% if (trip.favorite === true) { %>
               <form class="p-2" action="/trips/<%=trip._id%>-unfavorite" method="post">
                 <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star mr-1"></i></button>
@@ -58,8 +58,9 @@
       <div class="card-body">
         <p>Link: <a href="/trips/<%=trip._id%>">http://localhost:8081/trips/<%=trip._id%></a></p>
         <a
-          href="https://twitter.com/intent/tweet?text=http://localhost:8081/trips/<%=trip._id%>">
-          <i class="fa fa-twitter"></i></a>
+          href="https://twitter.com/intent/tweet?text=http://localhost:8081/trips/<%=trip._id%>"
+          class="btn btn-sm btn-primary">
+          Share&nbsp;<i class="fa fa-twitter"></i></a>
       </div>
     </div>
   <% }) %>
