@@ -191,7 +191,7 @@
         hotel_info[elIndex]['page']--;
         break;
       case 'next':
-        if (hotel_info[elIndex]['page'] >= results.length-1) {
+        if (!results || hotel_info[elIndex]['page'] >= results.length-1) {
           console.log('already on last el');
           return;
         }
@@ -227,7 +227,7 @@
         flight_info[elIndex]['page']--;
         break;
       case 'next':
-        if (flight_info[elIndex]['page'] >= results.length-1) {
+        if (!results || flight_info[elIndex]['page'] >= results.length-1) {
           console.log('already on last el');
           return;
         }
@@ -313,7 +313,7 @@
 
   var add_hotel_body = function (elIndex, hotel, hotelNo) {
     var address = hotel.address;
-   
+
     var phoneNo;
     if (hotel.contacts.length && hotel.contacts[0]['type'] === 'PHONE') {
       phoneNo = hotel.contacts[0]['detail']
@@ -343,5 +343,6 @@
     $(`#${type}_spinner_${index}`).addClass('d-none');
     $(`#${type}_body_${index}`).html('');
     $(`#${type}_body_${index}`).text(errMsg);
+    $(`#${type}_data_${index}`).removeClass('d-none');
   }
 </script>
