@@ -108,6 +108,7 @@
                 success: function(data) {
                   var results = data['results'];
                   if (!results) {
+                    fill_err('flight', Number('<%=i%>'), 'Could not retrieve flights for this location/date.')
                     return console.log('something went wrong...\n' + data);
                   }
                   flight_info[Number('<%=i%>')]['data'] = results;
@@ -136,6 +137,7 @@
                 success: function(data) {
                   var results = data['results'];
                   if (!results) {
+                    fill_err('hotel', Number('<%=i%>'), 'Could not retrieve hotels for this location/date.')
                     return console.log('something went wrong...\n' + data);
                   }
                   hotel_info[Number('<%=i%>')]['data'] = results;
@@ -335,5 +337,11 @@
     $(`#hotel_div_${elIndex}_${hotelNo} [name="ppm"]`).text(`\$${hotel.min_daily_rate.amount}`);
     $(`#hotel_div_${elIndex}_${hotelNo} [name="totPrice"]`).text(`\$${hotel.total_price.amount}`);
 
+  }
+
+  var fill_err = function(type, index, errMsg) {
+    $(`#${type}_spinner_${index}`).addClass('d-none');
+    $(`#${type}_body_${index}`).html('');
+    $(`#${type}_body_${index}`).text(errMsg);
   }
 </script>
