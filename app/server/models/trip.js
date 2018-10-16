@@ -7,6 +7,7 @@ const { Schema } = mongoose;
  * x: longitude (longitude first is the standard;
  *    x instead of lon because mongo automatically sorts by alpha)
  * y: latitude
+ * departureDate: the date that we are departing for the location
  */
 const location = Schema({
   name: String,

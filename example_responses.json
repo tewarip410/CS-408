@@ -46,3 +46,100 @@ flight_api_call:
       }
    },
 ]
+
+hotels:
+{  
+  "results":[  
+     {  
+        "property_code":"RLEWR486",
+        "property_name":"Knights Inn Pine Brook",
+        "location":{  
+           "latitude":40.85842,
+           "longitude":-74.33211
+        },
+        "address":{  
+           "line1":"55 Route 46 East",
+           "city":"Pine Brook",
+           "region":"NJ",
+           "postal_code":"07058",
+           "country":"US"
+        },
+        "total_price":{  
+           "amount":"130.00",
+           "currency":"USD"
+        },
+        "min_daily_rate":{  
+           "amount":"28.35",
+           "currency":"USD"
+        },
+        "contacts":[  
+           {  
+              "type":"PHONE",
+              "detail":"1-973-8821700"
+           },
+           {  
+              "type":"FAX",
+              "detail":"1-973-8828573"
+           }
+        ],
+        "amenities":[  
+           {  
+              "amenity":"ICE_MACHINE",
+              "ota_code":52,
+              "description":"Ice machine"
+           },
+           {  
+              "amenity":"INTERNET_PUBLIC_AREAS",
+              "ota_code":178,
+              "description":"Internet access in public areas"
+           },
+           {  
+              "amenity":"PARKING",
+              "ota_code":68,
+              "description":"Parking"
+           }
+        ],
+        "awards":[  
+
+        ],
+        "images":[  
+
+        ],
+        "rooms":[  
+           {  
+              "booking_code":"C1KARP",
+              "room_type_code":"C1K",
+              "rate_plan_code":"ARP",
+              "total_amount":{  
+                 "amount":"130.00",
+                 "currency":"USD"
+              },
+              "rates":[  
+                 {  
+                    "start_date":"2018-10-17",
+                    "end_date":"2018-10-19",
+                    "currency_code":"USD",
+                    "price":56.7
+                 }
+              ],
+              "descriptions":[  
+                 "AARP Rate-ID Required to Qualify. 50 years of",
+                 "age or older.",
+                 "King Bed Nonsmoking Room with free Wi-Fi,"
+              ],
+              "room_type_info":{  
+                 "room_type":"Room with bath - Standard",
+                 "bed_type":"King",
+                 "number_of_beds":"1"
+              },
+              "rate_type_code":"ARP"
+           }
+        ],
+        "_links":{  
+           "more_rooms_at_this_hotel":{  
+              "href":"https://api.sandbox.amadeus.com/v1.2/hotels/RLEWR486?apikey=L1p5fbab3ElOhCBWvOibeZKDeHwcisi4&check_in=2018-10-17&check_out=2018-10-19&lang=EN&currency=USD&referrer=more_rooms_at_this_hotel"
+           }
+        }
+     }
+  ]
+}

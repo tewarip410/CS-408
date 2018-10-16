@@ -2,6 +2,9 @@ const request = require('request');
 const moment = require('moment');
 const Trip = require('../models/trip');
 const AMADEUS_API = process.env.AMADEUS_API;
+const FIRST_LOC = 0;
+const ejsLint = require('ejs-lint');
+
 console.log(AMADEUS_API);
 
 module.exports = {
@@ -238,6 +241,7 @@ module.exports = {
       return res.redirect('/');
     }
 
+
     res.render('forms/create-form-layout',
       {
         page: 'itinerary.ejs',
@@ -295,7 +299,7 @@ module.exports = {
     const index = await Number(req.query.index);
     const {type} = req.query;
 
-    console.log('index: '+ index);
+    //console.log('index: '+ index);
 
     if (!tripId) { return res.json({error: 'Invalid trip ID.'}); }
     if (isNaN(index)) { return res.json({error: 'Invalid location index.'}); }
@@ -310,7 +314,7 @@ module.exports = {
       return res.redirect('/');
     }
 
-    if (index === trip.locations.length - 1) { return res.json({ OK: 'last index' }) }
+    if (index === trip.locations.length - 1 && type === 'flight') { return res.json({ OK: 'last index' }) }
 
 
     switch (type) {
@@ -319,7 +323,11 @@ module.exports = {
         if (flights) { return res.json(flights); }
         else { return res.json({ error: 'Error retrieving flights' }); }
       case 'hotel':
-        return await getHotels(trip, index);
+        const hotels = await getHotels(trip, index);
+        console.log('hotels:')
+        console.log(hotels)
+        if (hotels) { return res.json(hotels); }
+        else { return res.json({ error: 'Error retrieving hotels' }); }
       default:
         return res.json({error: 'Invalid type...'});
     }
@@ -328,6 +336,21 @@ module.exports = {
     //const flight_data = await getFlights(trip_data, trip.trpriority, trip.num_people);
     //const hotel_data = await getHotels(trip_data);
   }
+}
+
+async function getHotels(trip, index) {
+  if (index === 0) { return FIRST_LOC; }
+  const location = trip.locations[index];
+  const {departureDate, duration} = location;
+
+  const checkIn = await moment(departureDate).format('YYYY-MM-DD');
+  const checkOut = await moment(departureDate).add(duration, 'days').format('YYYY-MM-DD');
+
+  api_call = "https://api.sandbox.amadeus.com/v1.2/hotels/search-circle?apikey=L1p5fbab3ElOhCBWvOibeZKDeHwcisi4";
+  api_call = `${api_call}&latitude=${location.y}&longitude=${location.x}&radius=50&check_in=${checkIn}&check_out=${checkOut}&lang=EN&currency=USD&number_of_results=5`;
+
+  console.log(api_call)
+  return await call_api(api_call, 3);
 }
 
 function call_api(api_call, return_info) {
@@ -366,10 +389,10 @@ async function getFlights(trip, index) {
     return false;
   }
 
-  await console.log(trip.locations[index]);
+  /*await console.log(trip.locations[index]);
   await console.log(index+1);
   await console.log(trip.locations[index+1]);
-  await console.log(`index: ${index}`)
+  await console.log(`index: ${index}`)*/
   const lon1 = trip.locations[index].x;
   const lat1 = trip.locations[index].y;
   const lon2 = trip.locations[index+1].x;
@@ -514,6 +537,7 @@ async function getFlights(trip_data, efficiency, numPeople) {
 }
 */
 
+/*
 async function getHotels(trip_data) {
   const hotel_promises = [];
   for (var i = 0; i < trip_data.length; i++) {
@@ -537,3 +561,4 @@ async function getHotels(trip_data) {
     return false;
   }
 }
+*/
