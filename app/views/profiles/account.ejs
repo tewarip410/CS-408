@@ -16,21 +16,21 @@
     <div class="modal-content text-center modal-center">
 
       <form method="post" action="/profiles/<%=user.googleId%>">
-        <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" id="email" value="<%=user.email%>" disabled>
+        <div class="form-group text-center pl-4 pr-4 pt-3">
+          <label for="email"><h4><b>Email address</b></h4></label>
+          <input type="email" class="form-control text-center" id="email" value="<%=user.email%>" disabled>
         </div>
-        <div class="form-group">
-          <label for="name">Name</label>
+        <div class="form-group text-center pl-4 pr-4">
+          <label for="name" class="mb-0"><h5><b>Name</b></h5></label>
           <input type="name" class="form-control" id="name" name="name" value="<%=user.name%>">
         </div>
-        <div class="form-group">
-          <label for="bio">Bio</label>
+        <div class="form-group text-center pl-4 pr-4">
+          <label for="bio" class="mb-0"><h5><b>Bio</b></h5></label>
           <textarea class="form-control" id="bio" rows="3" name="bio"><%=user.bio%></textarea>
         </div>
         <button type="submit" class="btn btn-success btn-prof d-inline">Save</button>
         <button type="button" class="btn btn-danger btn-prof" onclick="triggerDelete()" id="deleteBtn">Delete</button>
-        <div class="d-none" id="deleteEl">
+        <div class="d-none mb-3" id="deleteEl">
           <p>Are you sure you would like to delete your account? This cannot be reversed!</p>
           <button type="button" class="btn btn-danger" onclick="deleteAcc()">Yes, delete my account</button>
           <button type="button" class="btn btn-primary" onclick="cancelDelete()">Cancel</button>
