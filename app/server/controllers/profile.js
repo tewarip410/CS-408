@@ -100,12 +100,12 @@ module.exports = {
     if (req.query.return) {
       if (req.query.return === 'al_inc') {
         trips.sort(function(a, b) {
-          return (a.name > b.name) - (a.name < b.name);
+          return (a.name < b.name) - (a.name > b.name);
         });
       }
       else if (req.query.return === 'al_dec') {
         trips.sort(function(a, b) {
-          return (a.name < b.name) - (a.name > b.name);
+          return (a.name > b.name) - (a.name < b.name);
         });
       }
       else if (req.query.return === 'favorite') {
