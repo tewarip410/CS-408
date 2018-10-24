@@ -79,7 +79,7 @@ module.exports = {
 
     // TODO serialize
 
-    let trip_duration = 0;
+    let trip_duration = 1;
 
     runningDate = new moment(date).utc();
     for (var i = 0; i < nLocations; i++) {
