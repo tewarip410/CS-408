@@ -42,7 +42,7 @@
           <div class="mr-auto p-2"><strong>Trip: </strong><%=trip.name%>&nbsp;&nbsp;•&nbsp;&nbsp;<strong>Begin Date: </strong><%=trip.start_date_str%>&nbsp;&nbsp;•&nbsp;&nbsp;<strong>Total Days: </strong><%=trip.total_duration%></div>
             <% if (trip.favorite === true) { %>
               <form class="p-2" action="/trips/<%=trip._id%>-unfavorite" method="post">
-                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star mr-1"></i></button>
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-star-o mr-1"></i></button>
               </form>
             <% } else { %>
               <form class="p-2" action="/trips/<%=trip._id%>-favorite" method="post">
