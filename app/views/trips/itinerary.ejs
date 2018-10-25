@@ -181,7 +181,7 @@
     var results = hotel_info[elIndex]['data'];
     switch (action) {
       case null:
-        $(`#hotel_spinner_${elIndex}`).addClass('d-none');
+        // $(`#hotel_spinner_${elIndex}`).addClass('d-none'); BUG
         break;
       case 'prev':
         if (hotel_info[elIndex]['page'] <= 0) {
