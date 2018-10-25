@@ -241,7 +241,6 @@ module.exports = {
       return res.redirect('/');
     }
 
-
     res.render('forms/create-form-layout',
       {
         page: 'itinerary.ejs',
