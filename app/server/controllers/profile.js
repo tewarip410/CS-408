@@ -29,6 +29,11 @@ module.exports = {
 
     user.name = name;
     user.bio = bio;
+
+    if (!name)
+      user.name = 'NULL'; // BUG
+    if (!bio)
+      user.bio = 'NULL';  // BUG
     await user.save();
 
     res.redirect(`/profiles/${googleId}`);
