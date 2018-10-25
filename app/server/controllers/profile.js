@@ -27,6 +27,12 @@ module.exports = {
 
     const user = await User.findOne({ googleId });
 
+    if (!user.numUpdates) {
+      user.numUpdates = 1;
+    } else {
+      user.numUpdates++;
+    }
+    user.oldName = user.name;
     user.name = name;
     user.bio = bio;
 
@@ -47,7 +53,7 @@ module.exports = {
   tripsGet: async (req, res) => {
     let {userId} = req.params;
     if (!userId) { userId = req.user._id; }
-    
+
     let {user} = req;
     if (userId !== req.user._id) {
       try {
@@ -80,7 +86,7 @@ module.exports = {
   otherTripsGet: async (req, res) => {
     let {userId} = req.params;
     if (!userId) { userId = req.user._id; }
-    
+
     let {user} = req;
     if (userId !== req.user._id) {
       try {

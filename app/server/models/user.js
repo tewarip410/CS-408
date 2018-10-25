@@ -6,7 +6,9 @@ const userSchema = Schema({
   email: String,
   googleId: String,
   googleImg: String,
-  bio: String
+  bio: String,
+  oldName: String,
+  numUpdates: Number
 
 });
 
