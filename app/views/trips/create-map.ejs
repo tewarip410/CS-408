@@ -157,7 +157,6 @@
 
       function geocodeLatLng(geocoder, map, infowindow) {
         var input = document.getElementById('latlng').value;
-        if (input != '') {
           var latlngStr = input.split(',', 2);
           var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
           geocoder.geocode({'location': latlng}, function(results, status) {
@@ -184,7 +183,6 @@
               window.alert('Geocoder failed due to: ' + status);
             }
           });
-        }
       }
 
       // Adds a marker to the map and push to the array.
