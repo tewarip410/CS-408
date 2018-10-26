@@ -173,6 +173,7 @@
                 });
                 infowindow.open(map, marker);
                 markers.push(marker);
+                markers.push(marker);
                 marker.addListener('click', function(event) {
                   delMarker(marker.position.lat(), marker.position.lng());
                 });
