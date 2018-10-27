@@ -9,6 +9,11 @@
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
     <script>
+      $(function () {
+        $(window).click(function (){
+          $('#navbar').addClass('bug');
+        });
+      });
       function initAutocomplete() {
         var geocoder = new google.maps.Geocoder;
         var infowindow = new google.maps.InfoWindow;
