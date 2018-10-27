@@ -15,7 +15,7 @@
         <!-- <button id="submit" type="button" class="btn btn-outline-warning">Enter Coordinates</button> -->
         <input id="submit" type="button" class="btn my-outline-primary map-controls" data-toggle="modal" data-target="#coordinatesModal" value="Enter Coordinates">
         <input onclick="deleteMarkers();" type=button class="btn my-outline-primary map-controls" value="Delete All Markers">
-        <input onclick="submitMarkers();" type=button class="btn my-primary map-controls" value="Continue">
+        <input onclick="submitMarkers();" type=button class="btn my-primary map-controls" id="continuebutton" value="Continue">
       </div>
     </div>
 
@@ -157,7 +157,6 @@
 
       function geocodeLatLng(geocoder, map, infowindow) {
         var input = document.getElementById('latlng').value;
-        if (input != '') {
           var latlngStr = input.split(',', 2);
           var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
           geocoder.geocode({'location': latlng}, function(results, status) {
@@ -174,6 +173,7 @@
                 });
                 infowindow.open(map, marker);
                 markers.push(marker);
+                markers.push(marker);
                 marker.addListener('click', function(event) {
                   delMarker(marker.position.lat(), marker.position.lng());
                 });
@@ -184,7 +184,6 @@
               window.alert('Geocoder failed due to: ' + status);
             }
           });
-        }
       }
 
       // Adds a marker to the map and push to the array.
@@ -252,7 +251,7 @@
 
       // Removes the markers from the map, but keeps them in the array.
       function clearMarkers() {
-        setMapOnAll(null);
+        //setMapOnAll(null);
       }
 
       // Shows any markers currently in the array.
