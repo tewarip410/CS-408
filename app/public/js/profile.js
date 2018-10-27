@@ -68,6 +68,7 @@ function deleteAcc() {
 }
 
 function cancelDelete() {
+  window.alert("You're account has been deleted! This cannot be undone!");
   $('#deleteBtn').removeClass('d-none');
   $('#deleteEl').addClass('d-none');
 }
