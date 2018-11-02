@@ -116,7 +116,7 @@ module.exports = {
       });
     } catch (e) {
       console.log(e);
-      req.flash('error', 'Sorry, something went wrong while attempting to create your trip.');
+      //req.flash('error', 'Sorry, something went wrong while attempting to create your trip.');
       return res.redirect('/trips/create/details');
     }
 
